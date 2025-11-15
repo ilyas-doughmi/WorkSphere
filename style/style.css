@@ -1,0 +1,69 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+.page{
+    height: 100vh;
+    width: 100%;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+}
+.container{
+    display: grid;
+    grid-template-columns: repeat(9,1fr);
+    grid-template-rows: repeat(8,1fr);
+    border: 5px solid black;
+    height: 90%;
+    width: 95%;
+    background: url("../media/plan.jpg") no-repeat ;
+    background-size: cover;
+    background-position: center;
+}
+
+.room{
+    border: 5px solid black;
+    background-color: aqua;
+    height: auto;
+    display: flex;
+    font-size: 12px;
+    justify-content: center;
+}
+
+
+.room1{
+    background-color: rgba(255, 166, 0, 0.322);
+    grid-column: 1/span 4;
+    grid-row: 1/ 4;
+}
+
+.room2{
+    background-color: rgba(0, 0, 255, 0.219);
+    grid-column: 6/8;
+    grid-row: 1/4;
+}
+.room3{
+    background-color: rgba(165, 42, 42, 0.445);
+    grid-column: 8/10;
+    grid-row: 1/4;
+}
+
+.room4{
+    background-color: rgba(255, 255, 0, 0.356);
+    grid-row: 4/9;
+    grid-column: 1/5;
+}
+
+.room5{
+    background-color: rgba(255, 99, 71, 0.575);
+    grid-column: 6/8;
+    grid-row: 6/9;
+}
+
+.room6{
+    background-color: rgba(0, 100, 0, 0.432);
+    grid-column: 8/10;
+    grid-row: 6/9;
+}
