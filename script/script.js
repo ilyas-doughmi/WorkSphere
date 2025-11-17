@@ -43,6 +43,7 @@ const container = document.getElementById("container_input");
 const addexp_btn = document.getElementById("addexp_btn");
 
 
+
 image_input.addEventListener('change',function(){
     if(image_input.value === ""){
         image_handler.src = "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg"
@@ -55,41 +56,56 @@ image_input.addEventListener('change',function(){
 
 submit_btn.addEventListener('click',function(){
     let employe = {
+        id : id,
         fullname : name_input.value,
         email : email_input.value,
         phone : phone_input.value,
         image : image_input.value,
         role : select_input.value,
-        isInRoom : false
+        isInRoom : false,
+        exp: []
     }
+    for(let i = 0; i < id ; i++){
+        let exp = {
+            id : i,
+            title: document.getElementById(`title_${i}`).value,
+            description: document.getElementById(`desc_${i}`).value,
+            from: document.getElementById(`startdate_${i}`).value,
+            end: document.getElementById(`enddate_${i}`).value
 
+        }
+        employe.exp.push(exp);
+    }
     employees.push(employe);
 })
 
 
 
 addexp_btn.addEventListener('click',function(){
-    const input_field = `  <div class="flex flex-col gap-2.5 rounded-2xl border border-black/10 bg-slate-50/80 p-3">
+    const input_field = ` <div class="flex flex-col  gap-2.5 rounded-2xl border border-black/10 bg-slate-50/80 p-3">
                     <p class="text-xs font-semibold uppercase tracking-[0.35em] text-slate-500">Experience</p>
-                    <input type="text"
+                    <input id="title_${id}" type="text"
                         class="h-[40px] rounded-xl border-2 border-black/20 px-3 text-xs uppercase tracking-[0.2em] placeholder:text-center"
                         placeholder="Title (e.g., Lead Receptionist)">
-                    <textarea
+                    <textarea id="desc_${id}"
                         class="min-h-[80px] rounded-xl border-2 border-black/20 px-3 py-2 text-xs uppercase tracking-[0.2em] placeholder:text-center"
                         placeholder="Description of responsibilities"></textarea>
                     <div class="grid grid-cols-2 gap-3">
                         <label class="flex flex-col gap-1 text-[10px] font-semibold uppercase tracking-[0.3em] text-gray-500">
                             From
-                            <input type="date" value="2023-01-01"
+                            <input type="date" value="2023-01-01" id="startdate_${id}"
                                 class="h-[38px] rounded-xl border-2 border-black/20 px-2.5 text-xs uppercase tracking-[0.2em]">
                         </label>
                         <label class="flex flex-col gap-1 text-[10px] font-semibold uppercase tracking-[0.3em] text-gray-500">
                             To
-                            <input type="date" value="2024-12-31"
+                            <input type="date" value="2024-12-31" id="enddate_${id}"
                                 class="h-[38px] rounded-xl border-2 border-black/20 px-2.5 text-xs uppercase tracking-[0.2em]">
                         </label>
                     </div>
                 </div>`
 
     container.insertAdjacentHTML('afterbegin',input_field);
+    id++;
 })
+
+
