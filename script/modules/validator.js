@@ -8,3 +8,20 @@ export function validator(object) {
     }
 
 }
+
+export function validate_exp(exp){
+     if (exp.title.length < 2) {
+        errors.title = "Job Title is too short";
+        return false;
+    }
+
+    if (exp.from === "" || exp.end === "") {
+        errors.dates = "Start and End dates are required";
+        return false;
+    }
+
+    if (exp.from > exp.end) {
+        errors.dates = "End date cannot be before Start date";
+        return false;
+    }
+}
