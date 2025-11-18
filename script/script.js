@@ -1,4 +1,5 @@
 import { save, load } from "./modules/localstorage.js";
+import { validator, validate_exp } from "./modules/validator.js";
 
 let employees = load() || [];
 let employee_id = 1;
@@ -88,13 +89,23 @@ document.addEventListener("DOMContentLoaded", () => {
             const endEl = document.getElementById(`enddate_${i}`);
 
             if (titleEl && titleEl.value.trim() !== "") {
-                newEmployee.exp.push({
+                const experience = {
                     title: titleEl.value,
                     description: descEl.value,
                     from: startEl.value,
                     end: endEl.value
-                });
+                };
+
+                if (!validate_exp(experience)) {
+                    return;
+                }
+
+                newEmployee.exp.push(experience);
             }
+        }
+
+        if (!validator(newEmployee)) {
+            return;
         }
 
         employees.push(newEmployee);
