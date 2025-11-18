@@ -14,14 +14,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const salle_archive = document.querySelector("#room6");
 
     const addworker_modal = document.getElementById("addworker_modal");
+    const container_sidebar = document.getElementById("container_sidebar");
+    
     const name_input = document.getElementById("name_input");
     const email_input = document.getElementById("email_input");
     const phone_input = document.getElementById("phone_input");
     const select_input = document.getElementById("select_input");
-    const image_handler = document.getElementById("emplyee_image_preview");
     const image_input = document.getElementById("image_input");
+    const image_handler = document.getElementById("emplyee_image_preview");
     const submit_btn = document.getElementById("submit_btn");
-    const container = document.getElementById("container_input");
+    
+    const container_input_exp = document.getElementById("container_input");
     const addexp_btn = document.getElementById("addexp_btn");
 
     window.hide_modal = function () {
@@ -40,42 +43,16 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    submit_btn.addEventListener("click", () => {
-        const employe = {
-            id: id,
-            fullname: name_input.value,
-            email: email_input.value,
-            phone: phone_input.value,
-            image: image_input.value,
-            role: select_input.value,
-            isInRoom: false,
-            exp: []
-        };
-
-        for (let i = 0; i < employee_id; i++) {
-            const exp = {
-                id: i,
-                title: document.getElementById(`title_${i}`).value,
-                description: document.getElementById(`desc_${i}`).value,
-                from: document.getElementById(`startdate_${i}`).value,
-                end: document.getElementById(`enddate_${i}`).value
-            };
-            employe.exp.push(exp);
-        }
-
-        employees.push(employe);
-        save(employees);
-         window.location.reload();
-        loaddata();
-        hide_modal();
-    });
-
     addexp_btn.addEventListener("click", () => {
         const input_field = `
-            <div class="flex flex-col gap-2.5 rounded-2xl border border-black/10 bg-slate-50/80 p-3">
-                <p class="text-xs font-semibold uppercase tracking-[0.35em] text-slate-500">Experience</p>
-                <input id="title_${employee_id}" type="text" class="h-[40px] rounded-xl border-2 border-black/20 px-3 text-xs uppercase tracking-[0.2em] placeholder:text-center" placeholder="Title">
-                <textarea id="desc_${employee_id}" class="min-h-[80px] rounded-xl border-2 border-black/20 px-3 py-2 text-xs uppercase tracking-[0.2em] placeholder:text-center" placeholder="Description"></textarea>
+            <div class="flex flex-col gap-2.5 rounded-2xl border border-black/10 bg-slate-50/80 p-3 mt-2 relative group">
+                <p class="text-xs font-semibold uppercase tracking-[0.35em] text-slate-500">Experience #${employee_id + 1}</p>
+                <input id="title_${employee_id}" type="text" 
+                    class="h-[40px] rounded-xl border-2 border-black/20 px-3 text-xs uppercase tracking-[0.2em] placeholder:text-center" 
+                    placeholder="Title">
+                <textarea id="desc_${employee_id}" 
+                    class="min-h-[80px] rounded-xl border-2 border-black/20 px-3 py-2 text-xs uppercase tracking-[0.2em] placeholder:text-center" 
+                    placeholder="Description"></textarea>
                 <div class="grid grid-cols-2 gap-3">
                     <label class="flex flex-col gap-1 text-[10px] font-semibold uppercase tracking-[0.3em] text-gray-500">
                         From
@@ -88,61 +65,113 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
             </div>`;
 
-        container.insertAdjacentHTML("afterbegin", input_field);
+        addexp_btn.insertAdjacentHTML("beforebegin", input_field);
         employee_id++;
     });
 
-    loaddata();
+    submit_btn.addEventListener("click", () => {
+        const newEmployee = {
+            id: id,
+            fullname: name_input.value || "---",
+            email: email_input.value || "---",
+            phone: phone_input.value || "---",
+            image: image_input.value || "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg",
+            role: select_input.value || "---",
+            isInRoom: false,
+            exp: []
+        };
+
+        for (let i = 0; i < employee_id; i++) {
+            const titleEl = document.getElementById(`title_${i}`);
+            const descEl = document.getElementById(`desc_${i}`);
+            const startEl = document.getElementById(`startdate_${i}`);
+            const endEl = document.getElementById(`enddate_${i}`);
+
+            if (titleEl && titleEl.value.trim() !== "") {
+                newEmployee.exp.push({
+                    title: titleEl.value,
+                    description: descEl.value,
+                    from: startEl.value,
+                    end: endEl.value
+                });
+            }
+        }
+
+        employees.push(newEmployee);
+        save(employees);
+        
+        window.hide_modal();
+        renderSidebar();
+        window.location.reload();
+    });
+
+    renderSidebar();
 });
 
-
-const container_sidebar = document.getElementById("container_sidebar");
-
-function loaddata() {
+function renderSidebar() {
+    const container_sidebar = document.getElementById("container_sidebar");
     container_sidebar.innerHTML = "";
-
+    
     employees = load() || [];
 
     employees.forEach(e => {
         const card = `
-        <div class="flex w-full items-center gap-4 rounded-2xl border border-indigo-100 bg-gradient-to-r from-indigo-50 via-white to-slate-50 p-4 shadow-md" id="${e.id}" onclick="show_info(${e.id})">
+        <div onclick="show_info(${e.id})" 
+             class="flex w-full cursor-pointer items-center gap-4 rounded-2xl border border-indigo-100 bg-gradient-to-r from-indigo-50 via-white to-slate-50 p-4 shadow-md transition hover:shadow-lg hover:scale-[1.02]">
             <img class="h-16 w-16 rounded-full border-2 border-indigo-200 object-cover shadow-sm" src="${e.image}">
             <div class="text-center md:text-left">
-                <h1 class="text-lg font-semibold text-slate-900">${e.fullname}</h1>
+                <h1 class="text-lg font-semibold text-slate-900 uppercase tracking-wide">${e.fullname}</h1>
                 <h3 class="text-xs font-semibold uppercase tracking-[0.2em] text-gray-500">${e.role}</h3>
             </div>
         </div>`;
-
         container_sidebar.insertAdjacentHTML("beforeend", card);
     });
 }
 
-
-// info section
-
 const info_modal = document.getElementById("info_modal");
 const info_name = document.getElementById("info_name");
 const info_role = document.getElementById("info_role");
-const close_info_modal = document.getElementById("close_info_modal");
 const info_image = document.getElementById("info_image");
 const info_email = document.getElementById("info_email");
 const info_phone = document.getElementById("info_phone");
+const info_experience_list = document.getElementById("info_experience");
+const close_info_modal = document.getElementById("close_info_modal");
 
-window.show_info = function(id_user){
-    const employe_info = employees.find(function(e){
-        return e.id == id_user;
-    })
+window.show_info = function(id_user) {
+    const employee = employees.find(e => e.id === id_user);
 
-    if(employe_info){
-  info_modal.classList.remove("hidden");
-    info_name.textContent = employe_info.fullname;
-    info_role.textContent = employe_info.role;
-    info_image.src = employe_info.image;
-    info_email.textContent = employe_info.email;
-    info_phone.textContent = employe_info.phone;
+    if (employee) {
+        info_name.textContent = employee.fullname;
+        info_role.textContent = employee.role;
+        info_image.src = employee.image;
+        info_email.textContent = employee.email;
+        info_phone.textContent = employee.phone;
+
+        info_experience_list.innerHTML = ""; 
+
+        if (employee.exp && employee.exp.length > 0) {
+            employee.exp.forEach(ex => {
+                const li = `
+                <li class="rounded-xl border border-black/10 bg-white p-3 flex flex-col gap-1">
+                    <div class="flex justify-between items-center border-b border-black/5 pb-1 mb-1">
+                         <span class="text-xs font-bold uppercase tracking-[0.2em] text-slate-800">${ex.title}</span>
+                         <span class="text-[10px] font-mono text-gray-400 bg-gray-100 px-1 rounded">${ex.from} / ${ex.end}</span>
+                    </div>
+                    <p class="text-[11px] leading-relaxed text-gray-600 uppercase tracking-wider">${ex.description}</p>
+                </li>`;
+                info_experience_list.insertAdjacentHTML("beforeend", li);
+            });
+        } else {
+            info_experience_list.innerHTML = `
+            <li class="rounded-xl border border-dashed border-black/20 p-3 text-center text-xs uppercase tracking-[0.3em] text-gray-500">
+                No experience added yet.
+            </li>`;
+        }
+
+        info_modal.classList.remove("hidden");
     }
-    close_info_modal.onclick = function(){
-        info_modal.classList.add("hidden");
-    }
-  
-}
+};
+
+close_info_modal.addEventListener("click", () => {
+    info_modal.classList.add("hidden");
+});
