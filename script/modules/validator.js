@@ -1,12 +1,16 @@
 export function validator(object) {
     if (object.fullname.length < 3) {
         errors.name = "Name is too short (min 3 letters)";
+        console.log(errors.name);
         return false;
     }
     if (object.role == "") {
         errors.name = "Please select a job role"
+        console.log(errors.name);
+        return false;
     }
 
+    return true;
 }
 
 export function validate_exp(exp){
