@@ -1,0 +1,26 @@
+{
+  "name": "worksphere",
+  "version": "1.0.0",
+  "description": "initial project",
+  "main": "index.js",
+  "scripts": {
+    "dev:css": "tailwindcss -i ./style/tailwind.css -o ./style/app.css -w",
+    "build:css": "tailwindcss -i ./style/tailwind.css -o ./style/app.css -m",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ilyas-doughmi/WorkSphere.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ilyas-doughmi/WorkSphere/issues"
+  },
+  "homepage": "https://github.com/ilyas-doughmi/WorkSphere#readme",
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.1.17",
+    "tailwindcss": "^4.1.17"
+  }
+}
