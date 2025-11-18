@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     submit_btn.addEventListener("click", () => {
         const employe = {
-            id: id++,
+            id: id,
             fullname: name_input.value,
             email: email_input.value,
             phone: phone_input.value,
@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         employees.push(employe);
         save(employees);
-
+         window.location.reload();
         loaddata();
         hide_modal();
     });
@@ -95,6 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
     loaddata();
 });
 
+
 const container_sidebar = document.getElementById("container_sidebar");
 
 function loaddata() {
@@ -104,7 +105,7 @@ function loaddata() {
 
     employees.forEach(e => {
         const card = `
-        <div class="flex w-full items-center gap-4 rounded-2xl border border-indigo-100 bg-gradient-to-r from-indigo-50 via-white to-slate-50 p-4 shadow-md">
+        <div class="flex w-full items-center gap-4 rounded-2xl border border-indigo-100 bg-gradient-to-r from-indigo-50 via-white to-slate-50 p-4 shadow-md" id="${e.id}">
             <img class="h-16 w-16 rounded-full border-2 border-indigo-200 object-cover shadow-sm" src="${e.image}">
             <div class="text-center md:text-left">
                 <h1 class="text-lg font-semibold text-slate-900">${e.fullname}</h1>
