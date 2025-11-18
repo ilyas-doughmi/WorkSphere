@@ -2,7 +2,7 @@ import { save, load } from "./modules/localstorage.js";
 
 let employees = load() || [];
 let employee_id = 1;
-let id = localStorage.length + 1;
+let id = Date.now();
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -105,7 +105,7 @@ function loaddata() {
 
     employees.forEach(e => {
         const card = `
-        <div class="flex w-full items-center gap-4 rounded-2xl border border-indigo-100 bg-gradient-to-r from-indigo-50 via-white to-slate-50 p-4 shadow-md" id="${e.id}">
+        <div class="flex w-full items-center gap-4 rounded-2xl border border-indigo-100 bg-gradient-to-r from-indigo-50 via-white to-slate-50 p-4 shadow-md" id="${e.id}" onclick="show_info(${e.id})">
             <img class="h-16 w-16 rounded-full border-2 border-indigo-200 object-cover shadow-sm" src="${e.image}">
             <div class="text-center md:text-left">
                 <h1 class="text-lg font-semibold text-slate-900">${e.fullname}</h1>
@@ -115,4 +115,34 @@ function loaddata() {
 
         container_sidebar.insertAdjacentHTML("beforeend", card);
     });
+}
+
+
+// info section
+
+const info_modal = document.getElementById("info_modal");
+const info_name = document.getElementById("info_name");
+const info_role = document.getElementById("info_role");
+const close_info_modal = document.getElementById("close_info_modal");
+const info_image = document.getElementById("info_image");
+const info_email = document.getElementById("info_email");
+const info_phone = document.getElementById("info_phone");
+
+window.show_info = function(id_user){
+    const employe_info = employees.find(function(e){
+        return e.id == id_user;
+    })
+
+    if(employe_info){
+  info_modal.classList.remove("hidden");
+    info_name.textContent = employe_info.fullname;
+    info_role.textContent = employe_info.role;
+    info_image.src = employe_info.image;
+    info_email.textContent = employe_info.email;
+    info_phone.textContent = employe_info.phone;
+    }
+    close_info_modal.onclick = function(){
+        info_modal.classList.add("hidden");
+    }
+  
 }
