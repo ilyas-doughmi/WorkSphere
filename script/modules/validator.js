@@ -44,6 +44,7 @@ export function validate_exp(exp) {
     }
 
     if (exp.from > exp.end) {
+        alert("End date cannot be before Start date");
         errors.dates = "End date cannot be before Start date";
         return false;
     }
