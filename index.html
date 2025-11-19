@@ -202,7 +202,7 @@
             <section class="flex w-full max-w-5xl items-center justify-center">
                 <div class="grid h-[90vh] w-full grid-cols-9 grid-rows-[repeat(8,minmax(0,1fr))] border-4 border-black">
 
-                    <!-- Salle de conférence -->
+                    <!-- Salle de confÃ©rence -->
                     <div id="room1"
                         class="col-span-4 col-start-1 row-span-3 row-start-1 flex flex-col items-center justify-between border-4 border-black bg-orange-200/70 p-4 text-center font-semibold uppercase tracking-wide hover:bg-orange-500/70">
                         <div class="top flex gap-5 items-center">
@@ -210,7 +210,7 @@
                             <i class="bi bi-plus-lg cursor-pointer text-3xl text-black/60 border-2 border-black rounded-full p-1 hover:bg-black hover:text-white"
                                 onclick="openAssignModal('room1')"></i>
                         </div>
-                        <div id="room" class="middle h-full w-full grid-cols-3 grid gap-4 mt-4">
+                        <div id="room" data-room-id="room1" class="middle h-full w-full grid-cols-3 grid gap-4 mt-4">
 
                         </div>
 
@@ -222,22 +222,31 @@
                         <div>Salle des serveurs</div>
                         <i class="bi bi-plus-lg cursor-pointer text-3xl text-black/60 border-2 border-black rounded-full p-1 hover:bg-black hover:text-white"
                             onclick="openAssignModal('room2')"></i>
+                        <div id="room" data-room-id="room2" class="middle h-full w-full grid-cols-3 grid gap-4 mt-4">
+
+                        </div>
                     </div>
 
-                    <!-- Salle de sécurité -->
+                    <!-- Salle de sÃ©curitÃ© -->
                     <div id="room3"
                         class="col-span-2 col-start-8 row-span-3 row-start-1 flex flex-col items-center justify-between border-4 border-black bg-rose-300/70 p-4 text-center font-semibold uppercase tracking-wide hover:bg-rose-400/70">
-                        <div>Salle de sécurité</div>
+                        <div>Salle de sÃ©curitÃ©</div>
                         <i class="bi bi-plus-lg cursor-pointer text-3xl text-black/60 border-2 border-black rounded-full p-1 hover:bg-black hover:text-white"
                             onclick="openAssignModal('room3')"></i>
+                        <div id="room" data-room-id="room3" class="middle h-full w-full grid-cols-3 grid gap-4 mt-4">
+
+                        </div>
                     </div>
 
-                    <!-- Réception -->
+                    <!-- RÃ©ception -->
                     <div id="room4"
                         class="col-span-4 col-start-1 row-span-5 row-start-4 flex flex-col items-center justify-between border-4 border-black bg-yellow-200/70 p-4 text-center font-semibold uppercase tracking-wide hover:bg-yellow-400/70">
-                        <div>Réception</div>
+                        <div>RÃ©ception</div>
                         <i class="bi bi-plus-lg cursor-pointer text-3xl text-black/60 border-2 border-black rounded-full p-1 hover:bg-black hover:text-white"
                             onclick="openAssignModal('room4')"></i>
+                        <div id="room" data-room-id="room4" class="middle h-full w-full grid-cols-3 grid gap-4 mt-4">
+
+                        </div>
                     </div>
 
                     <!-- Salle du personnel -->
@@ -246,14 +255,20 @@
                         <div>Salle du personnel</div>
                         <i class="bi bi-plus-lg cursor-pointer text-3xl text-black/60 border-2 border-black rounded-full p-1 hover:bg-black hover:text-white"
                             onclick="openAssignModal('room5')"></i>
+                        <div id="room" data-room-id="room5" class="middle h-full w-full grid-cols-3 grid gap-4 mt-4">
+
+                        </div>
                     </div>
 
-                    <!-- Salle d’archives -->
+                    <!-- Salle dâ€™archives -->
                     <div id="room6"
                         class="col-span-2 col-start-8 row-span-3 row-start-6 flex flex-col items-center justify-between border-4 border-black bg-emerald-300/70 p-4 text-center font-semibold uppercase tracking-wide hover:bg-emerald-400/70">
                         <div>Salle d'archives</div>
                         <i class="bi bi-plus-lg cursor-pointer text-3xl text-black/60 border-2 border-black rounded-full p-1 hover:bg-black hover:text-white"
                             onclick="openAssignModal('room6')"></i>
+                        <div id="room" data-room-id="room6" class="middle h-full w-full grid-cols-3 grid gap-4 mt-4">
+
+                        </div>
                     </div>
 
                 </div>
