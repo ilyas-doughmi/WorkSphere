@@ -267,7 +267,7 @@ function showemployees(room) {
             break;
     }
 
-    spawn_elements(worker);
+    spawn_elements(worker.filter(e => !e.isInRoom));
 }
 
 function spawn_elements(worker) {
