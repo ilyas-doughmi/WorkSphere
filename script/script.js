@@ -35,6 +35,8 @@ document.addEventListener("DOMContentLoaded", () => {
         addworker_modal.classList.remove("hidden");
     };
 
+    renderRooms();
+
     image_input.addEventListener("change", () => {
         if (image_input.value === "") {
             image_handler.src = "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg";
