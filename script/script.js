@@ -206,7 +206,7 @@ close_info_modal.addEventListener("click", () => {
 
 
 // select room
-
+const assign_workers_list = document.getElementById("assign_workers_list");
 let selectedRoom = null;
 
 window.openAssignModal = function (roomId) {
@@ -218,7 +218,9 @@ window.openAssignModal = function (roomId) {
 };
 
 window.closeAssignModal = function () {
+    assign_workers_list.innerHTML = "";
     document.getElementById("assign_modal").classList.add("hidden");
+    
 };
 
 
@@ -232,7 +234,7 @@ function showemployees(room) {
             break;
 
         case "room2": 
-            worker = employees.filter(e => e.role === "Technician" || e.role === "Manager");
+            worker = employees.filter(e =>e.role === "Manager");
             break;
 
         case "room3": 
@@ -252,8 +254,22 @@ function showemployees(room) {
             break;
     }
 
-
-    worker.forEach(function(e){
-        console.log(e.role);
-    })
+    spawn_elements(worker);
 }
+
+function spawn_elements(worker){
+    worker.forEach(function(e){
+        const card = `         <div class="mb-3 card h-[6vh] bg-gray-400/30 w-full rounded-lg flex gap-4 items-center" id="${e.id}" onclick="spawn(${e.id})">
+                    <img src="${e.image}" alt="" class="ml-4 h-[97%] rounded-full border-2">
+                    <h1 class="font-semibold text-[25px] uppercase tracking-[0.2em]">${e.fullname}</h1> 
+                </div>`
+                    assign_workers_list.insertAdjacentHTML('beforeend',card);
+
+                    console.log(e);
+    })
+    
+
+
+
+}
+
