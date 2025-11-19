@@ -269,7 +269,7 @@ function spawn_elements(worker) {
 }
 const room = document.getElementById("room");
 window.spawn = function (id_user) {
-    console.log(`spawn it to ${roome}`)
+
     const employee = employees.find(e => e.id === id_user);
     const card = `  <div
                                 class="card relative h-[130px] w-[105px] overflow-visible rounded-2xl border-2 border-black/70 hover:cursor-pointer">
