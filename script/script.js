@@ -296,3 +296,35 @@ window.removeFromRoom = function (id_user) {
 
     renderRooms();
 };
+
+function getRoomContainer(roomId) {
+    return document.querySelector(`[data-room-id="${roomId}"]`);
+}
+
+function createRoomCard(employee) {
+    return `  <div id="room-card-${employee.id}"
+                                class="card relative z-0 h-[130px] w-[105px] overflow-visible rounded-2xl border-2 border-black/70">
+                                <img src="${employee.image}"
+                                    class="h-full w-full rounded-2xl object-cover cursor-pointer" alt="Badge"
+                                    onclick="show_info(${employee.id})">
+                                <button
+                                    class="absolute -right-1 -top-2 flex h-8 w-8 items-center justify-center rounded-full border-2 border-black bg-white/95 text-base text-black transition hover:bg-black hover:text-white hover:cursor-pointer"
+                                    onclick="removeFromRoom(${employee.id})">
+                                    <i class="bi bi-x-lg leading-none"></i>
+                                </button>
+                            </div>`;
+}
+
+function renderRooms() {
+    const containers = document.querySelectorAll("[data-room-id]");
+    containers.forEach(container => container.innerHTML = "");
+
+    employees
+        .filter(emp => emp.isInRoom && emp.roomId)
+        .forEach(emp => {
+            const target = getRoomContainer(emp.roomId);
+            if (target) {
+                target.insertAdjacentHTML("beforeend", createRoomCard(emp));
+            }
+        });
+}
