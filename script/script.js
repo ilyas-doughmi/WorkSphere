@@ -265,10 +265,23 @@ function spawn_elements(worker) {
                 </div>`
         assign_workers_list.insertAdjacentHTML('beforeend', card);
 
-       
     })
 }
+const room = document.getElementById("room");
+window.spawn = function (id_user) {
+    console.log(`spawn it to ${roome}`)
+    const employee = employees.find(e => e.id === id_user);
+    const card = `  <div
+                                class="card relative h-[130px] w-[105px] overflow-visible rounded-2xl border-2 border-black/70 hover:cursor-pointer">
+                                <img src="${employee.image}"
+                                    class="h-full w-full rounded-2xl object-cover" alt="Badge">
+                                <button
+                                    class="absolute -right-1 -top-2 flex h-8 w-8 items-center justify-center rounded-full border-2 border-black bg-white/95 text-base text-black transition hover:bg-black hover:text-white hover:cursor-pointer">
+                                    <i class="bi bi-x-lg leading-none"></i>
+                                </button>
+                            </div>`
 
-window.spawn = function (id) {
-    console.log(`you've clicked ${id}`);
+
+    room.insertAdjacentHTML("beforeend",card);
+    closeAssignModal();
 }
