@@ -235,7 +235,7 @@ function showemployees(room) {
             break;
 
         case "room2":
-            worker = employees.filter(e => e.role === "Manager");
+            worker = employees.filter(e => e.role === "Manager" || e.role == "Technician");
             break;
 
         case "room3":
