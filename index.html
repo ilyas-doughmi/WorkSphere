@@ -5,15 +5,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WorkSphere - Virtual Workspace</title>
-    <link rel="stylesheet" href="./style/app.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 
 <body class="min-h-screen bg-white font-sans text-gray-900">
+    <!-- Assign worker modal -->
+     
+    <div id="assign_modal"
+        class="fixed inset-0 hidden bg-black/40 backdrop-blur-sm flex items-center justify-center px-4">
 
-    <!-- modal worker info -->
-        <div id="info_modal" class="modal fixed overflow-y-auto inset-0 flex h-full w-full items-center justify-center bg-black/40 px-2 py-4 backdrop-blur-sm hidden">
+        <div class="w-full max-w-[450px] bg-white border-4 border-black/80 rounded-2xl p-4 shadow-2xl">
+            <div class="flex items-center justify-between border-b border-black/10 pb-3">
+                <h2 class="text-xl font-bold uppercase tracking-wide">Assign Worker</h2>
+                <button onclick="closeAssignModal()">
+                    <i class="bi bi-x text-[40px] text-black/30 hover:text-black/60"></i>
+                </button>
+            </div>
+
+            <p class="text-xs uppercase text-gray-500 tracking-[0.3em] mt-2">Choose a worker</p>
+
+            <div id="assign_workers_list"
+                class="mt-3 max-h-[300px] overflow-y-auto flex flex-col gap-2 p-2 border border-black/10 rounded-xl bg-slate-50/70">
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Worker Info Modal -->
+    <div id="info_modal"
+        class="modal fixed overflow-y-auto inset-0 flex h-full w-full items-center justify-center bg-black/40 px-2 py-4 backdrop-blur-sm hidden">
 
         <div class="w-full max-w-[520px] rounded-[12px] border-4 border-black/80 bg-white shadow-2xl">
             <div class="flex flex-col gap-5 p-5">
@@ -21,43 +43,51 @@
                     <div class="flex flex-col gap-1">
                         <span class="text-xs font-semibold uppercase tracking-[0.4em] text-gray-500">#EMPLOYEE</span>
                         <h2 id="info_name" class="text-3xl font-bold uppercase tracking-wide text-slate-900">name</h2>
-                        <p id="info_role" class="text-xs font-semibold uppercase tracking-[0.35em] text-gray-500">role</p>
+                        <p id="info_role" class="text-xs font-semibold uppercase tracking-[0.35em] text-gray-500">role
+                        </p>
                     </div>
                     <button id="close_info_modal">
-                        <i class="bi bi-x relative left-[30px] text-[45px] font-black text-black/20 mr-6 hover:cursor"></i>
+                        <i class="bi bi-x text-[45px] font-black text-black/20 hover:text-black/40"></i>
                     </button>
                 </div>
+
                 <div class="flex flex-col items-center gap-4">
                     <img id="info_image"
                         src="https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg"
-                        alt="worker avatar"
                         class="h-[120px] w-[120px] rounded-full border-2 border-black object-cover shadow-sm">
-                    <div class="grid w-full grid-cols-2 gap-3 text-center text-xs font-semibold uppercase tracking-[0.3em] text-gray-600">
+
+                    <div
+                        class="grid grid-cols-2 gap-3 w-full text-center text-xs font-semibold uppercase tracking-[0.3em]">
                         <div class="rounded-xl border border-black/10 p-3">
                             <p class="text-[10px] text-gray-500">Email</p>
-                            <p id="info_email" class="text-sm tracking-[0.2em] text-slate-900 break-all">---</p>
+                            <p id="info_email" class="text-sm tracking-wide break-all">---</p>
                         </div>
                         <div class="rounded-xl border border-black/10 p-3">
                             <p class="text-[10px] text-gray-500">Phone</p>
-                            <p id="info_phone" class="text-sm tracking-[0.2em] text-slate-900">---</p>
+                            <p id="info_phone" class="text-sm tracking-wide">---</p>
                         </div>
                     </div>
                 </div>
-                <div class="flex flex-col gap-2" id="info_experience_container">
+
+                <div class="flex flex-col gap-2">
                     <p class="text-xs font-semibold uppercase tracking-[0.35em] text-gray-500">Experience</p>
-                    <ul id="info_experience" class="flex max-h-[250px] flex-col gap-2 overflow-y-auto rounded-2xl border border-black/10 bg-slate-50/80 p-3">
-                        <li class="rounded-xl border border-dashed border-black/20 p-3 text-center text-xs uppercase tracking-[0.3em] text-gray-500">
+                    <ul id="info_experience"
+                        class="flex max-h-[250px] flex-col gap-2 overflow-y-auto rounded-2xl border border-black/10 bg-slate-50/80 p-3">
+                        <li
+                            class="rounded-xl border border-dashed border-black/20 p-3 text-center text-xs uppercase tracking-[0.3em] text-gray-500">
                             No experience added yet.
                         </li>
                     </ul>
                 </div>
+
             </div>
         </div>
     </div>
 
-    <!-- modal add worker -->
-    <div class="modal fixed overflow-y-auto inset-0 flex h-full w-full items-center justify-center bg-black/40 px-2 py-4 backdrop-blur-sm hidden"
-        id="addworker_modal">
+    <!-- Add Worker Modal -->
+    <div id="addworker_modal"
+        class="modal fixed overflow-y-auto inset-0 flex h-full w-full items-center justify-center bg-black/40 px-2 py-4 backdrop-blur-sm hidden">
+
         <div class="w-full max-w-[460px] rounded-[12px] border-4 border-black/80 bg-white shadow-2xl">
             <div class="flex flex-col gap-4 p-4">
                 <div class="flex items-center justify-between border-b border-black/10 pb-3">
@@ -66,20 +96,24 @@
                         <h1 class="text-3xl font-bold uppercase tracking-wide text-slate-900">Add New Worker</h1>
                     </div>
                     <button onclick="hide_modal()">
-                        <i class="bi bi-x relative left-[40px]  text-[45px] font-black text-black/20"></i>
+                        <i class="bi bi-x text-[45px] font-black text-black/20 hover:text-black/40"></i>
                     </button>
-                    <span class=""></span>
                 </div>
+
+                <!-- Inputs -->
                 <div class="flex flex-col gap-2.5">
-                    <input type="text" id="name_input"
+                    <input id="name_input" type="text"
                         class="h-[40px] rounded-xl border-2 border-black/20 px-3 text-sm uppercase tracking-wide placeholder:text-center"
                         placeholder="Full Name">
-                    <input type="email" id="email_input"
+
+                    <input id="email_input" type="email"
                         class="h-[40px] rounded-xl border-2 border-black/20 px-3 text-sm uppercase tracking-wide placeholder:text-center"
                         placeholder="Email">
-                    <input type="tel" id="phone_input"
+
+                    <input id="phone_input" type="tel"
                         class="h-[40px] rounded-xl border-2 border-black/20 px-3 text-sm uppercase tracking-wide placeholder:text-center"
                         placeholder="Telephone">
+
                     <select id="select_input"
                         class="h-[40px] rounded-xl border-2 border-black/20 px-3 text-sm uppercase tracking-wide text-gray-600">
                         <option value="" disabled selected>Choose ROLE</option>
@@ -90,47 +124,55 @@
                         <option value="Maintenance">Maintenance</option>
                     </select>
                 </div>
+
+                <!-- Avatar -->
                 <div class="flex flex-col items-center gap-2.5">
                     <img id="emplyee_image_preview"
                         src="https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg"
-                        alt="worker avatar"
                         class="h-[110px] w-[110px] rounded-full border-2 border-black object-cover shadow-sm">
-                    <input type="text" id="image_input"
+
+                    <input id="image_input" type="text"
                         class="h-[40px] w-full rounded-xl border-2 border-black/20 px-3 text-sm uppercase tracking-wide placeholder:text-center"
                         placeholder="Photo (URL)">
                 </div>
-                <!-- container for exp -->
 
-                <div class="container flex overflow-y-auto max-h-[600px] w-full flex flex-col" id="container_input">
-                    <!-- input for exp -->
-                    <div class="flex flex-col  gap-2.5 rounded-2xl border border-black/10 bg-slate-50/80 p-3">
+                <!-- Experience -->
+                <div id="container_input" class="container flex overflow-y-auto max-h-[600px] w-full flex flex-col">
+
+                    <div class="flex flex-col gap-2.5 rounded-2xl border border-black/10 bg-slate-50/80 p-3">
                         <p class="text-xs font-semibold uppercase tracking-[0.35em] text-slate-500">Experience</p>
+
                         <input id="title_0" type="text"
                             class="h-[40px] rounded-xl border-2 border-black/20 px-3 text-xs uppercase tracking-[0.2em] placeholder:text-center"
                             placeholder="Title (e.g., Lead Receptionist)">
+
                         <textarea id="desc_0"
                             class="min-h-[80px] rounded-xl border-2 border-black/20 px-3 py-2 text-xs uppercase tracking-[0.2em] placeholder:text-center"
                             placeholder="Description of responsibilities"></textarea>
+
                         <div class="grid grid-cols-2 gap-3">
                             <label
-                                class="flex flex-col gap-1 text-[10px] font-semibold uppercase tracking-[0.3em] text-gray-500">
+                                class="flex flex-col text-[10px] font-semibold uppercase tracking-[0.3em] text-gray-500">
                                 From
-                                <input type="date" value="2023-01-01" id="startdate_0"
+                                <input id="startdate_0" type="date" value="2023-01-01"
                                     class="h-[38px] rounded-xl border-2 border-black/20 px-2.5 text-xs uppercase tracking-[0.2em]">
                             </label>
+
                             <label
-                                class="flex flex-col gap-1 text-[10px] font-semibold uppercase tracking-[0.3em] text-gray-500">
+                                class="flex flex-col text-[10px] font-semibold uppercase tracking-[0.3em] text-gray-500">
                                 To
-                                <input type="date" value="2024-12-31" id="enddate_0"
+                                <input id="enddate_0" type="date" value="2024-12-31"
                                     class="h-[38px] rounded-xl border-2 border-black/20 px-2.5 text-xs uppercase tracking-[0.2em]">
                             </label>
                         </div>
                     </div>
+
                     <button id="addexp_btn"
                         class="mt-2 rounded-xl border-2 border-dashed border-black/30 px-4 py-3 text-xs font-semibold uppercase tracking-[0.35em] text-gray-600 transition hover:border-black hover:text-black">
                         Add experience entry
                     </button>
                 </div>
+
                 <button id="submit_btn"
                     class="w-full rounded-xl bg-black py-2.5 text-sm font-semibold uppercase tracking-[0.35em] text-white transition hover:bg-black/80">
                     Add new worker
@@ -139,49 +181,75 @@
         </div>
     </div>
 
-   
-
+    <!-- Main Layout -->
     <div class="flex min-h-screen w-full flex-col-reverse md:flex-row">
 
+        <!-- Sidebar -->
         <div
             class="flex flex-col gap-6 border-r border-indigo-200/80 bg-gradient-to-b from-indigo-100 via-slate-100 to-white p-4 shadow-lg md:w-1/4">
-            <div id="container_sidebar" class="flex flex-row flex-wrap gap-4 md:flex-col">
+            <div id="container_sidebar" class="flex flex-row flex-wrap gap-4 md:flex-col"></div>
 
-            </div>
             <div class="mt-auto">
                 <button onclick="show_modal()"
-                    class="w-full rounded-lg bg-black px-4 py-2 text-sm font-semibold uppercase tracking-wide text-white transition hover:bg-black/80">Add
-                    new worker</button>
+                    class="w-full rounded-lg bg-black px-4 py-2 text-sm font-semibold uppercase tracking-wide text-white transition hover:bg-black/80">
+                    Add new worker
+                </button>
             </div>
-
         </div>
+
+        <!-- Rooms -->
         <main class="flex flex-1 items-center justify-center bg-white p-4">
             <section class="flex w-full max-w-5xl items-center justify-center">
                 <div class="grid h-[90vh] w-full grid-cols-9 grid-rows-[repeat(8,minmax(0,1fr))] border-4 border-black">
+
+                    <!-- Salle de conférence -->
                     <div id="room1"
-                        class="col-span-4 col-start-1 row-span-3 row-start-1 flex items-start justify-center border-4 border-black bg-orange-200/70 p-4 text-center text-xs font-semibold uppercase tracking-wide hover:bg-orange-600/70">
-                        <h1>Salle de conference</h1>
+                        class="col-span-4 col-start-1 row-span-3 row-start-1 flex flex-col items-center justify-between border-4 border-black bg-orange-200/70 p-4 text-center font-semibold uppercase tracking-wide hover:bg-orange-500/70">
+                        <div class="text-xl">Salle de conférence</div>
+                        <i
+                            class="bi bi-plus-lg cursor-pointer text-3xl text-black/60 border-2 border-black rounded-full p-1 hover:bg-black hover:text-white"></i>
                     </div>
+
+                    <!-- Salle des serveurs -->
                     <div id="room2"
-                        class="col-span-2 col-start-6 row-span-3 row-start-1 flex items-start justify-center border-4 border-black bg-blue-200/70 p-4 text-center text-xs font-semibold uppercase tracking-wide">
-                        <h1>Salle des serveurs</h1>
+                        class="col-span-2 col-start-6 row-span-3 row-start-1 flex flex-col items-center justify-between border-4 border-black bg-blue-200/70 p-4 text-center font-semibold uppercase tracking-wide hover:bg-blue-400/70">
+                        <div>Salle des serveurs</div>
+                        <i
+                            class="bi bi-plus-lg cursor-pointer text-3xl text-black/60 border-2 border-black rounded-full p-1 hover:bg-black hover:text-white"></i>
                     </div>
+
+                    <!-- Salle de sécurité -->
                     <div id="room3"
-                        class="col-span-2 col-start-8 row-span-3 row-start-1 flex items-start justify-center border-4 border-black bg-rose-300/70 p-4 text-center text-xs font-semibold uppercase tracking-wide">
-                        <h1>Salle de securite</h1>
+                        class="col-span-2 col-start-8 row-span-3 row-start-1 flex flex-col items-center justify-between border-4 border-black bg-rose-300/70 p-4 text-center font-semibold uppercase tracking-wide hover:bg-rose-400/70">
+                        <div>Salle de sécurité</div>
+                        <i
+                            class="bi bi-plus-lg cursor-pointer text-3xl text-black/60 border-2 border-black rounded-full p-1 hover:bg-black hover:text-white"></i>
                     </div>
+
+                    <!-- Réception -->
                     <div id="room4"
-                        class="col-span-4 col-start-1 row-span-5 row-start-4 flex items-start justify-center border-4 border-black bg-yellow-200/70 p-4 text-center text-xs font-semibold uppercase tracking-wide">
-                        <h1>Reception</h1>
+                        class="col-span-4 col-start-1 row-span-5 row-start-4 flex flex-col items-center justify-between border-4 border-black bg-yellow-200/70 p-4 text-center font-semibold uppercase tracking-wide hover:bg-yellow-400/70">
+                        <div>Réception</div>
+                        <i
+                            class="bi bi-plus-lg cursor-pointer text-3xl text-black/60 border-2 border-black rounded-full p-1 hover:bg-black hover:text-white"></i>
                     </div>
+
+                    <!-- Salle du personnel -->
                     <div id="room5"
-                        class="col-span-2 col-start-6 row-span-3 row-start-6 flex items-start justify-center border-4 border-black bg-orange-300/70 p-4 text-center text-xs font-semibold uppercase tracking-wide">
-                        <h1>Salle du personnel</h1>
+                        class="col-span-2 col-start-6 row-span-3 row-start-6 flex flex-col items-center justify-between border-4 border-black bg-orange-300/70 p-4 text-center font-semibold uppercase tracking-wide hover:bg-orange-400/70">
+                        <div>Salle du personnel</div>
+                        <i
+                            class="bi bi-plus-lg cursor-pointer text-3xl text-black/60 border-2 border-black rounded-full p-1 hover:bg-black hover:text-white"></i>
                     </div>
+
+                    <!-- Salle d’archives -->
                     <div id="room6"
-                        class="col-span-2 col-start-8 row-span-3 row-start-6 flex items-start justify-center border-4 border-black bg-emerald-300/70 p-4 text-center text-xs font-semibold uppercase tracking-wide">
-                        <h1>Salle d'archives</h1>
+                        class="col-span-2 col-start-8 row-span-3 row-start-6 flex flex-col items-center justify-between border-4 border-black bg-emerald-300/70 p-4 text-center font-semibold uppercase tracking-wide hover:bg-emerald-400/70">
+                        <div>Salle d'archives</div>
+                        <i
+                            class="bi bi-plus-lg cursor-pointer text-3xl text-black/60 border-2 border-black rounded-full p-1 hover:bg-black hover:text-white"></i>
                     </div>
+
                 </div>
             </section>
         </main>
