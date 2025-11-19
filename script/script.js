@@ -5,6 +5,10 @@ let employees = load() || [];
 let employee_id = 1;
 let id = Date.now();
 
+function syncEmployees() {
+    employees = load() || [];
+}
+
 document.addEventListener("DOMContentLoaded", () => {
 
     const salle_de_confirence = document.querySelector("#room1");
@@ -72,6 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     submit_btn.addEventListener("click", () => {
+        syncEmployees();
 
         const newEmployee = {
             id: id,
@@ -133,7 +138,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         window.hide_modal();
         renderSidebar();
-        window.location.reload();
+        renderRooms();
     });
 
     renderSidebar();
@@ -143,7 +148,7 @@ function renderSidebar() {
     const container_sidebar = document.getElementById("container_sidebar");
     container_sidebar.innerHTML = "";
 
-    employees = load() || [];
+    syncEmployees();
 
     const availableEmployees = employees.filter(e => !e.isInRoom);
 
@@ -179,6 +184,7 @@ const info_experience_list = document.getElementById("info_experience");
 const close_info_modal = document.getElementById("close_info_modal");
 
 window.show_info = function (id_user) {
+    syncEmployees();
     const employee = employees.find(e => e.id === id_user);
 
     if (employee) {
@@ -224,6 +230,7 @@ let selectedRoom = null;
 
 window.openAssignModal = function (roomId) {
     selectedRoom = roomId;
+    syncEmployees();
 
     document.getElementById("assign_modal").classList.remove("hidden");
 
@@ -239,6 +246,8 @@ window.closeAssignModal = function () {
 
 
 function showemployees(room) {
+    assign_workers_list.innerHTML = "";
+
     let worker;
 
     switch (room) {
@@ -281,7 +290,7 @@ function spawn_elements(worker) {
     })
 }
 window.spawn = function (id_user) {
-
+    syncEmployees();
     const employee = employees.find(e => e.id === id_user);
     if (!employee || !selectedRoom) {
         return;
@@ -292,12 +301,13 @@ window.spawn = function (id_user) {
     save(employees);
 
     renderRooms();
+    renderSidebar();
     closeAssignModal();
-    window.location.reload();
 }
 
 window.removeFromRoom = function (id_user) {
 
+    syncEmployees();
     const employee = employees.find(e => e.id === id_user);
     if (!employee) {
         return;
@@ -308,7 +318,7 @@ window.removeFromRoom = function (id_user) {
     save(employees);
 
     renderRooms();
-    window.location.reload();
+    renderSidebar();
 };
 
 function getRoomContainer(roomId) {
@@ -330,6 +340,7 @@ function createRoomCard(employee) {
 }
 
 function renderRooms() {
+    syncEmployees();
     const containers = document.querySelectorAll("[data-room-id]");
     containers.forEach(container => container.innerHTML = "");
 
