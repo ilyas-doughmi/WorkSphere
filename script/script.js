@@ -25,7 +25,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const image_handler = document.getElementById("emplyee_image_preview");
     const submit_btn = document.getElementById("submit_btn");
     
-    const container_input_exp = document.getElementById("container_input");
     const addexp_btn = document.getElementById("addexp_btn");
 
     window.hide_modal = function () {
@@ -71,6 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     submit_btn.addEventListener("click", () => {
+
         const newEmployee = {
             id: id,
             fullname: name_input.value || "---",
@@ -81,6 +81,26 @@ document.addEventListener("DOMContentLoaded", () => {
             isInRoom: false,
             exp: []
         };
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const phoneRegex = /^06\d{8}$/;
+
+        if (newEmployee.fullname.length < 3) {
+            alert("Name must be at least 3 characters");
+            return;
+        }
+        if (!emailRegex.test(newEmployee.email)) {
+            alert("Invalid email format");
+            return;
+        }
+        if (!phoneRegex.test(newEmployee.phone)) {
+            alert("Phone must start with 06 and contain 10 digits");
+            return;
+        }
+        if (newEmployee.role === "") {
+            alert("Please select a job role");
+            return;
+        }
 
         for (let i = 0; i < employee_id; i++) {
             const titleEl = document.getElementById(`title_${i}`);
@@ -97,15 +117,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 };
 
                 if (!validate_exp(experience)) {
+                    alert("Experience fields invalid");
                     return;
                 }
 
                 newEmployee.exp.push(experience);
             }
-        }
-
-        if (!validator(newEmployee)) {
-            return;
         }
 
         employees.push(newEmployee);
@@ -158,7 +175,7 @@ window.show_info = function(id_user) {
         info_email.textContent = employee.email;
         info_phone.textContent = employee.phone;
 
-        info_experience_list.innerHTML = ""; 
+        info_experience_list.innerHTML = "";
 
         if (employee.exp && employee.exp.length > 0) {
             employee.exp.forEach(ex => {
