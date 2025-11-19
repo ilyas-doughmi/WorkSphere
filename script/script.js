@@ -145,7 +145,17 @@ function renderSidebar() {
 
     employees = load() || [];
 
-    employees.forEach(e => {
+    const availableEmployees = employees.filter(e => !e.isInRoom);
+
+    if (availableEmployees.length === 0) {
+        container_sidebar.innerHTML = `
+        <div class="w-full rounded-2xl border border-dashed border-indigo-200 bg-indigo-50/50 p-4 text-center text-xs font-semibold uppercase tracking-[0.25em] text-indigo-400">
+            No available workers
+        </div>`;
+        return;
+    }
+
+    availableEmployees.forEach(e => {
         const card = `
         <div onclick="show_info(${e.id})" 
              class="flex w-full cursor-pointer items-center gap-4 rounded-2xl border border-indigo-100 bg-gradient-to-r from-indigo-50 via-white to-slate-50 p-4 shadow-md transition hover:shadow-lg hover:scale-[1.02]">
