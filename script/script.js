@@ -220,7 +220,7 @@ window.openAssignModal = function (roomId) {
 window.closeAssignModal = function () {
     assign_workers_list.innerHTML = "";
     document.getElementById("assign_modal").classList.add("hidden");
-    
+
 };
 
 
@@ -229,15 +229,15 @@ function showemployees(room) {
     let worker;
 
     switch (room) {
-        case "room1": 
+        case "room1":
             worker = employees;
             break;
 
-        case "room2": 
-            worker = employees.filter(e =>e.role === "Manager");
+        case "room2":
+            worker = employees.filter(e => e.role === "Manager");
             break;
 
-        case "room3": 
+        case "room3":
             worker = employees.filter(e => e.role === "Security Agent" || e.role === "Manager");
             break;
 
@@ -257,19 +257,18 @@ function showemployees(room) {
     spawn_elements(worker);
 }
 
-function spawn_elements(worker){
-    worker.forEach(function(e){
+function spawn_elements(worker) {
+    worker.forEach(function (e) {
         const card = `         <div class="mb-3 card h-[6vh] bg-gray-400/30 w-full rounded-lg flex gap-4 items-center" id="${e.id}" onclick="spawn(${e.id})">
                     <img src="${e.image}" alt="" class="ml-4 h-[97%] rounded-full border-2">
                     <h1 class="font-semibold text-[25px] uppercase tracking-[0.2em]">${e.fullname}</h1> 
                 </div>`
-                    assign_workers_list.insertAdjacentHTML('beforeend',card);
+        assign_workers_list.insertAdjacentHTML('beforeend', card);
 
-                    console.log(e);
+       
     })
-    
-
-
-
 }
 
+window.spawn = function (id) {
+    console.log(`you've clicked ${id}`);
+}
