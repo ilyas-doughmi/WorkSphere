@@ -293,6 +293,7 @@ window.spawn = function (id_user) {
 
     renderRooms();
     closeAssignModal();
+    window.location.reload();
 }
 
 window.removeFromRoom = function (id_user) {
@@ -307,6 +308,7 @@ window.removeFromRoom = function (id_user) {
     save(employees);
 
     renderRooms();
+    window.location.reload();
 };
 
 function getRoomContainer(roomId) {
