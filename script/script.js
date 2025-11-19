@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const addworker_modal = document.getElementById("addworker_modal");
     const container_sidebar = document.getElementById("container_sidebar");
-    
+
     const name_input = document.getElementById("name_input");
     const email_input = document.getElementById("email_input");
     const phone_input = document.getElementById("phone_input");
@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const image_input = document.getElementById("image_input");
     const image_handler = document.getElementById("emplyee_image_preview");
     const submit_btn = document.getElementById("submit_btn");
-    
+
     const addexp_btn = document.getElementById("addexp_btn");
 
     window.hide_modal = function () {
@@ -127,7 +127,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         employees.push(newEmployee);
         save(employees);
-        
+
         window.hide_modal();
         renderSidebar();
         window.location.reload();
@@ -139,7 +139,7 @@ document.addEventListener("DOMContentLoaded", () => {
 function renderSidebar() {
     const container_sidebar = document.getElementById("container_sidebar");
     container_sidebar.innerHTML = "";
-    
+
     employees = load() || [];
 
     employees.forEach(e => {
@@ -165,7 +165,7 @@ const info_phone = document.getElementById("info_phone");
 const info_experience_list = document.getElementById("info_experience");
 const close_info_modal = document.getElementById("close_info_modal");
 
-window.show_info = function(id_user) {
+window.show_info = function (id_user) {
     const employee = employees.find(e => e.id === id_user);
 
     if (employee) {
@@ -209,11 +209,51 @@ close_info_modal.addEventListener("click", () => {
 
 let selectedRoom = null;
 
-window.openAssignModal = function(roomId) {
-    selectedRoom = roomId; 
+window.openAssignModal = function (roomId) {
+    selectedRoom = roomId;
+
     document.getElementById("assign_modal").classList.remove("hidden");
+
+    showemployees(selectedRoom);
 };
 
-window.closeAssignModal = function() {
+window.closeAssignModal = function () {
     document.getElementById("assign_modal").classList.add("hidden");
 };
+
+
+
+function showemployees(room) {
+    let worker;
+
+    switch (room) {
+        case "room1": 
+            worker = employees;
+            break;
+
+        case "room2": 
+            worker = employees.filter(e => e.role === "Technician" || e.role === "Manager");
+            break;
+
+        case "room3": 
+            worker = employees.filter(e => e.role === "Security Agent" || e.role === "Manager");
+            break;
+
+        case "room4":
+            worker = employees.filter(e => e.role === "Receptionist" || e.role === "Manager");
+            break;
+
+        case "room5":
+            worker = employees;
+            break;
+
+        default:
+            worker = employees.filter(e => e.role !== "Maintenance");
+            break;
+    }
+
+
+    worker.forEach(function(e){
+        console.log(e.role);
+    })
+}
