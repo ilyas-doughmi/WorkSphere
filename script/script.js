@@ -203,3 +203,17 @@ window.show_info = function(id_user) {
 close_info_modal.addEventListener("click", () => {
     info_modal.classList.add("hidden");
 });
+
+
+// select room
+
+let selectedRoom = null;
+
+window.openAssignModal = function(roomId) {
+    selectedRoom = roomId; 
+    document.getElementById("assign_modal").classList.remove("hidden");
+};
+
+window.closeAssignModal = function() {
+    document.getElementById("assign_modal").classList.add("hidden");
+};
