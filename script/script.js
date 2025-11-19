@@ -271,17 +271,42 @@ const room = document.getElementById("room");
 window.spawn = function (id_user) {
 
     const employee = employees.find(e => e.id === id_user);
-    const card = `  <div
-                                class="card relative h-[130px] w-[105px] overflow-visible rounded-2xl border-2 border-black/70 hover:cursor-pointer">
+    if (!employee) {
+        return;
+    }
+
+    employee.isInRoom = true;
+    save(employees);
+
+    const card = `  <div id="room-card-${employee.id}"
+                                class="card relative z-0 h-[130px] w-[105px] overflow-visible rounded-2xl border-2 border-black/70">
                                 <img src="${employee.image}"
-                                    class="h-full w-full rounded-2xl object-cover" alt="Badge">
+                                    class="h-full w-full rounded-2xl object-cover cursor-pointer" alt="Badge"
+                                    onclick="show_info(${employee.id})">
                                 <button
-                                    class="absolute -right-1 -top-2 flex h-8 w-8 items-center justify-center rounded-full border-2 border-black bg-white/95 text-base text-black transition hover:bg-black hover:text-white hover:cursor-pointer">
+                                    class="absolute -right-1 -top-2 flex h-8 w-8 items-center justify-center rounded-full border-2 border-black bg-white/95 text-base text-black transition hover:bg-black hover:text-white hover:cursor-pointer"
+                                    onclick="removeFromRoom(${employee.id})">
                                     <i class="bi bi-x-lg leading-none"></i>
                                 </button>
                             </div>`
 
 
-    room.insertAdjacentHTML("beforeend",card);
+    room.insertAdjacentHTML("beforeend", card);
     closeAssignModal();
 }
+
+window.removeFromRoom = function (id_user) {
+
+    const employee = employees.find(e => e.id === id_user);
+    if (!employee) {
+        return;
+    }
+
+    employee.isInRoom = false;
+    save(employees);
+
+    const card = document.getElementById(`room-card-${id_user}`);
+    if (card) {
+        card.remove();
+    }
+};
