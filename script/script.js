@@ -4,9 +4,34 @@ import { validator, validate_exp } from "./modules/validator.js";
 let employees = load() || [];
 let employee_id = 1;
 let id = Date.now();
+let room_count = {
+    room1: 0,
+    room2: 0,
+    room3: 0,
+    room4: 0,
+    room5: 0,
+    room6: 0
+};
 
 function syncEmployees() {
     employees = load() || [];
+}
+
+function trackRooms() {
+    room_count = {
+        room1: 0,
+        room2: 0,
+        room3: 0,
+        room4: 0,
+        room5: 0,
+        room6: 0
+    };
+
+    employees.forEach(emp => {
+        if (emp.isInRoom && emp.roomId && room_count.hasOwnProperty(emp.roomId)) {
+            room_count[emp.roomId]++;
+        }
+    });
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -346,6 +371,7 @@ function renderRooms() {
     syncEmployees();
     const containers = document.querySelectorAll("[data-room-id]");
     containers.forEach(container => container.innerHTML = "");
+    trackRooms();
 
     employees
         .filter(emp => emp.isInRoom && emp.roomId)
