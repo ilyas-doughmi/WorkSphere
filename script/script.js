@@ -214,7 +214,7 @@ function getRoomLabel(roomId) {
         room1: "Salle de conference",
         room2: "Salle serveur",
         room3: "Salle securite",
-        room4: "Accueil",
+        room4: "Reception",
         room5: "Salle du personnel",
         room6: "Salle archive"
     };
@@ -263,7 +263,6 @@ close_info_modal.addEventListener("click", () => {
 });
 
 
-// select room
 const assign_workers_list = document.getElementById("assign_workers_list");
 let selectedRoom = null;
 
@@ -295,23 +294,27 @@ function showemployees(room) {
             break;
 
         case "room2":
-            worker = employees.filter(e => e.role === "Manager" || e.role == "Technician");
+            worker = employees.filter(e => e.role === "Technician" || e.role === "Manager" || e.role === "Maintenance");
             break;
 
         case "room3":
-            worker = employees.filter(e => e.role === "Security Agent" || e.role === "Manager");
+            worker = employees.filter(e => e.role === "Security Agent" || e.role === "Manager" || e.role === "Maintenance");
             break;
 
         case "room4":
-            worker = employees.filter(e => e.role === "Receptionist" || e.role === "Manager");
+            worker = employees.filter(e => e.role === "Receptionist" || e.role === "Manager" || e.role === "Maintenance");
             break;
 
         case "room5":
             worker = employees;
             break;
 
+        case "room6":
+            worker = employees.filter(e => e.role == "Manager"|| e.role === "Technician");
+            break;
+
         default:
-            worker = employees.filter(e => e.role !== "Maintenance");
+            worker = employees;
             break;
     }
 
@@ -331,8 +334,16 @@ function spawn_elements(worker) {
 
     })
 }
+
 window.spawn = function (id_user) {
     syncEmployees();
+    trackRooms();
+
+    if (room_count[selectedRoom] >= 6) {
+        alert("This room is full!");
+        return;
+    }
+
     const employee = employees.find(e => e.id === id_user);
     if (!employee || !selectedRoom) {
         return;
@@ -386,6 +397,31 @@ function renderRooms() {
     const containers = document.querySelectorAll("[data-room-id]");
     containers.forEach(container => container.innerHTML = "");
     trackRooms();
+
+    const room_colors = {
+        room1: "bg-orange-200/70",
+        room2: "bg-blue-200/70",
+        room3: "bg-rose-300/70",
+        room4: "bg-yellow-200/70",
+        room5: "bg-orange-300/70",
+        room6: "bg-emerald-300/70"
+    };
+
+    for (let room in room_count) {
+        const el = document.getElementById(room);
+        if (!el) continue;
+
+        const is_empty = room_count[room] === 0;
+        const is_mandatory = room !== "room1" && room !== "room5";
+
+        if (is_empty && is_mandatory) {
+            el.classList.remove(room_colors[room]);
+            el.classList.add("bg-red-200");
+        } else {
+            el.classList.remove("bg-red-200");
+            el.classList.add(room_colors[room]);
+        }
+    }
 
     employees
         .filter(emp => emp.isInRoom && emp.roomId)
