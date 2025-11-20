@@ -281,9 +281,12 @@ function showemployees(room) {
 
 function spawn_elements(worker) {
     worker.forEach(function (e) {
-        const card = `         <div class="mb-3 card h-[6vh] bg-gray-400/30 w-full rounded-lg flex gap-4 items-center" id="${e.id}" onclick="spawn(${e.id})">
+        const card = `         <div class="mb-3 card h-[6vh] bg-gray-400/30 w-full rounded-lg flex gap-4 items-center border-black border-2" id="${e.id}" onclick="spawn(${e.id})">
                     <img src="${e.image}" alt="" class="ml-4 h-[97%] rounded-full border-2">
-                    <h1 class="font-semibold text-[25px] uppercase tracking-[0.2em]">${e.fullname}</h1> 
+                    <div>
+                    <h1 class="font-semibold text-[18px] uppercase tracking-[0.2em]">${e.fullname}</h1> 
+                    <h6 class="font-semibold text-[10px] uppercase tracking-[0.2em]">${e.role}</h6> 
+                    </div>
                 </div>`
         assign_workers_list.insertAdjacentHTML('beforeend', card);
 
