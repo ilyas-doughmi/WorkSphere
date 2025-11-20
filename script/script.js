@@ -205,8 +205,21 @@ const info_role = document.getElementById("info_role");
 const info_image = document.getElementById("info_image");
 const info_email = document.getElementById("info_email");
 const info_phone = document.getElementById("info_phone");
+const info_room = document.getElementById("info_room");
 const info_experience_list = document.getElementById("info_experience");
 const close_info_modal = document.getElementById("close_info_modal");
+
+function getRoomLabel(roomId) {
+    const roomLabels = {
+        room1: "Salle de conference",
+        room2: "Salle serveur",
+        room3: "Salle securite",
+        room4: "Accueil",
+        room5: "Salle du personnel",
+        room6: "Salle archive"
+    };
+    return roomLabels[roomId] || "---";
+}
 
 window.show_info = function (id_user) {
     syncEmployees();
@@ -218,6 +231,7 @@ window.show_info = function (id_user) {
         info_image.src = employee.image;
         info_email.textContent = employee.email;
         info_phone.textContent = employee.phone;
+        info_room.textContent = employee.isInRoom && employee.roomId ? getRoomLabel(employee.roomId) : "---";
 
         info_experience_list.innerHTML = "";
 
