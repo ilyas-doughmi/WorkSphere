@@ -310,7 +310,7 @@ function showemployees(room) {
             break;
 
         case "room6":
-            worker = employees.filter(e => e.role == "Manager"|| e.role === "Technician");
+            worker = employees.filter(e => e.role == "Manager" || e.role === "Technician");
             break;
 
         default:
@@ -357,7 +357,6 @@ window.spawn = function (id_user) {
     renderSidebar();
     closeAssignModal();
 }
-
 window.removeFromRoom = function (id_user) {
 
     syncEmployees();
@@ -367,6 +366,7 @@ window.removeFromRoom = function (id_user) {
     }
 
     employee.isInRoom = false;
+
     employee.roomId = null;
     save(employees);
 
@@ -380,12 +380,12 @@ function getRoomContainer(roomId) {
 
 function createRoomCard(employee) {
     return `  <div id="room-card-${employee.id}"
-                                class="card relative z-0 h-[130px] w-[105px] overflow-visible rounded-2xl border-2 border-black/70">
+                                class="card relative z-0 h-[65px] w-[52px] sm:h-[75px] sm:w-[60px] md:h-[90px] md:w-[72px] lg:h-[100px] lg:w-[80px] overflow-visible rounded-lg sm:rounded-lg md:rounded-xl border border-black/70 sm:border-2">
                                 <img src="${employee.image}"
-                                    class="h-full w-full rounded-2xl object-cover cursor-pointer" alt="Badge"
+                                    class="h-full w-full rounded-lg sm:rounded-lg md:rounded-xl object-cover cursor-pointer" alt="Badge"
                                     onclick="show_info(${employee.id})">
                                 <button
-                                    class="absolute -right-1 -top-2 flex h-8 w-8 items-center justify-center rounded-full border-2 border-black bg-white/95 text-base text-black transition hover:bg-black hover:text-white hover:cursor-pointer"
+                                    class="absolute -right-0.5 -top-1 sm:-right-1 sm:-top-2 flex h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7 items-center justify-center rounded-full border border-black sm:border-2 bg-white/95 text-[10px] sm:text-xs md:text-sm text-black transition hover:bg-black hover:text-white hover:cursor-pointer"
                                     onclick="removeFromRoom(${employee.id})">
                                     <i class="bi bi-x-lg leading-none"></i>
                                 </button>
