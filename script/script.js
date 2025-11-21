@@ -35,14 +35,6 @@ function trackRooms() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-
-    const salle_de_confirence = document.querySelector("#room1");
-    const salle_de_server = document.querySelector("#room2");
-    const salle_de_securite = document.querySelector("#room3");
-    const salle_de_reception = document.querySelector("#room4");
-    const salle_de_personnel = document.querySelector("#room5");
-    const salle_archive = document.querySelector("#room6");
-
     const addworker_modal = document.getElementById("addworker_modal");
     const container_sidebar = document.getElementById("container_sidebar");
 
@@ -76,7 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     addexp_btn.addEventListener("click", () => {
         const input_field = `
-            <div class="flex flex-col gap-2.5 rounded-2xl border border-black/10 bg-slate-50/80 p-3 mt-2 relative group">
+            <div class="exp-field flex flex-col gap-2.5 rounded-2xl border border-black/10 bg-slate-50/80 p-3 mt-2 relative group">
                 <p class="text-xs font-semibold uppercase tracking-[0.35em] text-slate-500">Experience #${employee_id + 1}</p>
                 <input id="title_${employee_id}" type="text" 
                     class="h-[40px] rounded-xl border-2 border-black/20 px-3 text-xs uppercase tracking-[0.2em] placeholder:text-center" 
@@ -149,18 +141,35 @@ document.addEventListener("DOMContentLoaded", () => {
                     end: endEl.value
                 };
 
-                if (!validate_exp(experience)) {
-                    alert("Experience fields invalid");
+                try {
+                    if (!validate_exp(experience)) {
+                        alert("Experience fields invalid (Check Title/Dates)");
+                        return;
+                    }
+                    newEmployee.exp.push(experience);
+                } catch (error) {
+                    alert("Error in Validator: " + error.message);
+                    console.error(error);
                     return;
                 }
-
-                newEmployee.exp.push(experience);
             }
         }
 
         employees.push(newEmployee);
         save(employees);
-        window.location.reload();
+
+        name_input.value = "";
+        email_input.value = "";
+        phone_input.value = "";
+        select_input.value = "";
+        image_input.value = "";
+        image_handler.src = "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg";
+        
+        document.querySelectorAll(".exp-field").forEach(e => e.remove());
+        
+        id = Date.now();
+        employee_id = 1;
+
         window.hide_modal();
         renderSidebar();
         renderRooms();
@@ -262,57 +271,44 @@ close_info_modal.addEventListener("click", () => {
     info_modal.classList.add("hidden");
 });
 
-
 const assign_workers_list = document.getElementById("assign_workers_list");
 let selectedRoom = null;
 
 window.openAssignModal = function (roomId) {
     selectedRoom = roomId;
     syncEmployees();
-
     document.getElementById("assign_modal").classList.remove("hidden");
-
     showemployees(selectedRoom);
 };
 
 window.closeAssignModal = function () {
     assign_workers_list.innerHTML = "";
     document.getElementById("assign_modal").classList.add("hidden");
-
 };
-
-
 
 function showemployees(room) {
     assign_workers_list.innerHTML = "";
-
     let worker;
 
     switch (room) {
         case "room1":
             worker = employees;
             break;
-
         case "room2":
             worker = employees.filter(e => e.role === "Technician" || e.role === "Manager" || e.role === "Nettoyage");
             break;
-
         case "room3":
             worker = employees.filter(e => e.role === "Security Agent" || e.role === "Manager" || e.role === "Nettoyage");
             break;
-
         case "room4":
             worker = employees.filter(e => e.role === "Receptionist" || e.role === "Manager" || e.role === "Nettoyage");
             break;
-
         case "room5":
             worker = employees;
             break;
-
         case "room6":
             worker = employees.filter(e => e.role == "Manager");
             break;
-
         default:
             worker = employees;
             break;
@@ -323,7 +319,7 @@ function showemployees(room) {
 
 function spawn_elements(worker) {
     worker.forEach(function (e) {
-        const card = `         <div class="mb-3 card h-[6vh] bg-gray-400/30 w-full rounded-lg flex gap-4 items-center border-black border-2" id="${e.id}" onclick="spawn(${e.id})">
+        const card = `<div class="mb-3 card h-[6vh] bg-gray-400/30 w-full rounded-lg flex gap-4 items-center border-black border-2" id="${e.id}" onclick="spawn(${e.id})">
                     <img src="${e.image}" alt="" class="ml-4 h-[97%] rounded-full border-2">
                     <div>
                     <h1 class="font-semibold text-[18px] uppercase tracking-[0.2em]">${e.fullname}</h1> 
@@ -331,7 +327,6 @@ function spawn_elements(worker) {
                     </div>
                 </div>`
         assign_workers_list.insertAdjacentHTML('beforeend', card);
-
     })
 }
 
@@ -365,8 +360,8 @@ window.spawn = function (id_user) {
     renderSidebar();
     closeAssignModal();
 }
-window.removeFromRoom = function (id_user) {
 
+window.removeFromRoom = function (id_user) {
     syncEmployees();
     const employee = employees.find(e => e.id === id_user);
     if (!employee) {
@@ -374,7 +369,6 @@ window.removeFromRoom = function (id_user) {
     }
 
     employee.isInRoom = false;
-
     employee.roomId = null;
     save(employees);
 
@@ -387,17 +381,17 @@ function getRoomContainer(roomId) {
 }
 
 function createRoomCard(employee) {
-    return `  <div id="room-card-${employee.id}"
-                                class="card relative z-0 h-[65px] w-[52px] sm:h-[75px] sm:w-[60px] md:h-[90px] md:w-[72px] lg:h-[100px] lg:w-[80px] overflow-visible rounded-lg sm:rounded-lg md:rounded-xl border border-black/70 sm:border-2">
-                                <img src="${employee.image}"
-                                    class="h-full w-full rounded-lg sm:rounded-lg md:rounded-xl object-cover cursor-pointer" alt="Badge"
-                                    onclick="show_info(${employee.id})">
-                                <button
-                                    class="absolute -right-0.5 -top-1 sm:-right-1 sm:-top-2 flex h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7 items-center justify-center rounded-full border border-black sm:border-2 bg-white/95 text-[10px] sm:text-xs md:text-sm text-black transition hover:bg-black hover:text-white hover:cursor-pointer"
-                                    onclick="removeFromRoom(${employee.id})">
-                                    <i class="bi bi-x-lg leading-none"></i>
-                                </button>
-                            </div>`;
+    return `<div id="room-card-${employee.id}"
+            class="card relative z-0 h-[65px] w-[52px] sm:h-[75px] sm:w-[60px] md:h-[90px] md:w-[72px] lg:h-[100px] lg:w-[80px] overflow-visible rounded-lg sm:rounded-lg md:rounded-xl border border-black/70 sm:border-2">
+            <img src="${employee.image}"
+                class="h-full w-full rounded-lg sm:rounded-lg md:rounded-xl object-cover cursor-pointer" alt="Badge"
+                onclick="show_info(${employee.id})">
+            <button
+                class="absolute -right-0.5 -top-1 sm:-right-1 sm:-top-2 flex h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7 items-center justify-center rounded-full border border-black sm:border-2 bg-white/95 text-[10px] sm:text-xs md:text-sm text-black transition hover:bg-black hover:text-white hover:cursor-pointer"
+                onclick="removeFromRoom(${employee.id})">
+                <i class="bi bi-x-lg leading-none"></i>
+            </button>
+        </div>`;
 }
 
 function renderRooms() {
