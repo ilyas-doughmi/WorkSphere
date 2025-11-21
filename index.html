@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>WorkSphere - Virtual Workspace</title>
 
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
@@ -11,74 +11,84 @@
 </head>
 
 <body class="min-h-screen bg-white font-sans text-gray-900">
-    <!-- Assign worker modal -->
-
     <div id="assign_modal"
-        class="fixed inset-0 z-50 hidden bg-black/40 backdrop-blur-sm flex items-center justify-center px-4">
+        class="fixed inset-0 z-50 hidden bg-black/40 backdrop-blur-sm flex items-center justify-center p-2 sm:p-3 md:px-4">
 
-        <div class="w-full max-w-[450px] bg-white border-4 border-black/80 rounded-2xl p-4 shadow-2xl">
-            <div class="flex items-center justify-between border-b border-black/10 pb-3">
-                <h2 class="text-xl font-bold uppercase tracking-wide">Assign Worker</h2>
+        <div
+            class="w-full max-w-[90vw] sm:max-w-[350px] md:max-w-[450px] max-h-[90vh] overflow-y-auto bg-white border-2 md:border-4 border-black/80 rounded-xl md:rounded-2xl p-3 sm:p-3 md:p-4 shadow-2xl">
+            <div class="flex items-center justify-between border-b border-black/10 pb-2 md:pb-3">
+                <h2 class="text-sm sm:text-base md:text-xl font-bold uppercase tracking-wide">Assign Worker</h2>
                 <button onclick="closeAssignModal()">
-                    <i class="bi bi-x text-[40px] text-black/30 hover:text-black/60"></i>
+                    <i class="bi bi-x text-[28px] sm:text-[30px] md:text-[40px] text-black/30 hover:text-black/60"></i>
                 </button>
             </div>
 
-            <p class="text-xs uppercase text-gray-500 tracking-[0.3em] mt-2 mb-3">Choose a worker</p>
+            <p
+                class="text-[9px] sm:text-[10px] md:text-xs uppercase text-gray-500 tracking-[0.2em] md:tracking-[0.3em] mt-2 mb-2 md:mb-3">
+                Choose a worker</p>
 
             <div id="assign_workers_list"
-                class="mt-3  max-h-[300px] overflow-y-auto flex flex-col gap-2 p-2 border border-black/10 rounded-xl bg-slate-50/70">
+                class="mt-2 md:mt-3 max-h-[40vh] sm:max-h-[250px] md:max-h-[300px] overflow-y-auto flex flex-col gap-2 p-1.5 md:p-2 border border-black/10 rounded-lg md:rounded-xl bg-slate-50/70">
             </div>
         </div>
     </div>
 
 
-    <!-- Worker Info Modal -->
     <div id="info_modal"
-        class="modal fixed overflow-y-auto inset-0 z-50 flex h-full w-full items-center justify-center bg-black/40 px-2 py-4 backdrop-blur-sm hidden">
+        class="modal fixed overflow-y-auto inset-0 z-50 flex h-full w-full items-center justify-center bg-black/40 p-2 sm:p-3 md:py-4 backdrop-blur-sm hidden">
 
-        <div class="w-full max-w-[520px] rounded-[12px] border-4 border-black/80 bg-white shadow-2xl">
-            <div class="flex flex-col gap-5 p-5">
-                <div class="flex items-start justify-between border-b border-black/10 pb-4">
-                    <div class="flex flex-col gap-1">
-                        <span class="text-xs font-semibold uppercase tracking-[0.4em] text-gray-500">#EMPLOYEE</span>
-                        <h2 id="info_name" class="text-3xl font-bold uppercase tracking-wide text-slate-900">name</h2>
-                        <p id="info_role" class="text-xs font-semibold uppercase tracking-[0.35em] text-gray-500">role
+        <div
+            class="w-full max-w-[95vw] sm:max-w-[340px] md:max-w-[520px] max-h-[95vh] overflow-y-auto rounded-lg md:rounded-[12px] border-2 md:border-4 border-black/80 bg-white shadow-2xl">
+            <div class="flex flex-col gap-2 sm:gap-3 md:gap-5 p-2.5 sm:p-3 md:p-5">
+                <div class="flex items-start justify-between border-b border-black/10 pb-2 md:pb-4">
+                    <div class="flex flex-col gap-0.5 sm:gap-1">
+                        <span
+                            class="text-[8px] sm:text-[9px] md:text-xs font-semibold uppercase tracking-[0.25em] sm:tracking-[0.3em] md:tracking-[0.4em] text-gray-500">#EMPLOYEE</span>
+                        <h2 id="info_name"
+                            class="text-base sm:text-xl md:text-3xl font-bold uppercase tracking-wide text-slate-900">
+                            name</h2>
+                        <p id="info_role"
+                            class="text-[9px] sm:text-[10px] md:text-xs font-semibold uppercase tracking-[0.2em] sm:tracking-[0.25em] md:tracking-[0.35em] text-gray-500">
+                            role
                         </p>
                     </div>
                     <button id="close_info_modal">
-                        <i class="bi bi-x text-[45px] font-black text-black/20 hover:text-black/40 hover:cursor-pointer"></i>
+                        <i
+                            class="bi bi-x text-[30px] sm:text-[35px] md:text-[45px] font-black text-black/20 hover:text-black/40 hover:cursor-pointer"></i>
                     </button>
                 </div>
 
-                <div class="flex flex-col items-center gap-4">
+                <div class="flex flex-col items-center gap-2 sm:gap-3 md:gap-4">
                     <img id="info_image"
                         src="https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg"
-                        class="h-[120px] w-[120px] rounded-full border-2 border-black object-cover shadow-sm">
+                        class="h-[70px] w-[70px] sm:h-[90px] sm:w-[90px] md:h-[120px] md:w-[120px] rounded-full border-2 border-black object-cover shadow-sm">
 
                     <div
-                        class="grid grid-cols-3 gap-3 w-full text-center text-xs font-semibold uppercase tracking-[0.3em]">
-                        <div class="rounded-xl border border-black/10 p-3">
-                            <p class="text-[10px] text-gray-500">Email</p>
-                            <p id="info_email" class="text-sm tracking-wide break-all">---</p>
+                        class="grid grid-cols-3 gap-1.5 sm:gap-2 md:gap-3 w-full text-center text-xs font-semibold uppercase tracking-[0.15em] sm:tracking-[0.2em] md:tracking-[0.3em]">
+                        <div class="rounded-lg md:rounded-xl border border-black/10 p-1.5 sm:p-2 md:p-3">
+                            <p class="text-[8px] sm:text-[9px] md:text-[10px] text-gray-500">Email</p>
+                            <p id="info_email" class="text-[9px] sm:text-[10px] md:text-sm tracking-wide break-all">---
+                            </p>
                         </div>
-                        <div class="rounded-xl border border-black/10 p-3">
-                            <p class="text-[10px] text-gray-500">Phone</p>
-                            <p id="info_phone" class="text-sm tracking-wide">---</p>
+                        <div class="rounded-lg md:rounded-xl border border-black/10 p-1.5 sm:p-2 md:p-3">
+                            <p class="text-[8px] sm:text-[9px] md:text-[10px] text-gray-500">Phone</p>
+                            <p id="info_phone" class="text-[9px] sm:text-[10px] md:text-sm tracking-wide">---</p>
                         </div>
-                        <div class="rounded-xl border border-black/10 p-3">
-                            <p class="text-[10px] text-gray-500">Salle</p>
-                            <p id="info_room" class="text-sm tracking-wide">---</p>
+                        <div class="rounded-lg md:rounded-xl border border-black/10 p-1.5 sm:p-2 md:p-3">
+                            <p class="text-[8px] sm:text-[9px] md:text-[10px] text-gray-500">Salle</p>
+                            <p id="info_room" class="text-[9px] sm:text-[10px] md:text-sm tracking-wide">---</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="flex flex-col gap-2">
-                    <p class="text-xs font-semibold uppercase tracking-[0.35em] text-gray-500">Experience</p>
+                <div class="flex flex-col gap-1 sm:gap-1.5 md:gap-2">
+                    <p
+                        class="text-[9px] sm:text-[10px] md:text-xs font-semibold uppercase tracking-[0.2em] sm:tracking-[0.25em] md:tracking-[0.35em] text-gray-500">
+                        Experience</p>
                     <ul id="info_experience"
-                        class="flex max-h-[250px] flex-col gap-2 overflow-y-auto rounded-2xl border border-black/10 bg-slate-50/80 p-3">
+                        class="flex max-h-[30vh] sm:max-h-[180px] md:max-h-[250px] flex-col gap-1 sm:gap-1.5 md:gap-2 overflow-y-auto rounded-xl md:rounded-2xl border border-black/10 bg-slate-50/80 p-1.5 sm:p-2 md:p-3">
                         <li
-                            class="rounded-xl border border-dashed border-black/20 p-3 text-center text-xs uppercase tracking-[0.3em] text-gray-500">
+                            class="rounded-lg md:rounded-xl border border-dashed border-black/20 p-1.5 sm:p-2 md:p-3 text-center text-[9px] sm:text-[10px] md:text-xs uppercase tracking-[0.15em] sm:tracking-[0.2em] md:tracking-[0.3em] text-gray-500">
                             No experience added yet.
                         </li>
                     </ul>
@@ -88,38 +98,40 @@
         </div>
     </div>
 
-    <!-- Add Worker Modal -->
     <div id="addworker_modal"
-        class="modal fixed overflow-y-auto inset-0 z-50 flex h-full w-full items-center justify-center bg-black/40 px-2 py-4 backdrop-blur-sm hidden">
+        class="modal fixed overflow-y-auto inset-0 z-50 flex h-full w-full items-center justify-center bg-black/40 p-2 sm:p-3 md:py-4 backdrop-blur-sm hidden">
 
-        <div class="w-full max-w-[460px] rounded-[12px] border-4 border-black/80 bg-white shadow-2xl">
-            <div class="flex flex-col gap-4 p-4">
-                <div class="flex items-center justify-between border-b border-black/10 pb-3">
-                    <div class="flex flex-col gap-1">
-                        <span class="text-xs font-semibold uppercase tracking-[0.4em] text-gray-500">#EMPLOYEE</span>
-                        <h1 class="text-3xl font-bold uppercase tracking-wide text-slate-900">Add New Worker</h1>
+        <div
+            class="w-full max-w-[95vw] sm:max-w-[340px] md:max-w-[460px] lg:max-w-[520px] max-h-[95vh] overflow-y-auto rounded-lg md:rounded-[12px] border-2 md:border-4 border-black/80 bg-white shadow-2xl">
+            <div class="flex flex-col gap-2 sm:gap-3 md:gap-4 p-2.5 sm:p-3 md:p-4">
+                <div class="flex items-center justify-between border-b border-black/10 pb-2 md:pb-3">
+                    <div class="flex flex-col gap-0.5 md:gap-1">
+                        <span
+                            class="text-[8px] sm:text-[9px] md:text-xs font-semibold uppercase tracking-[0.25em] sm:tracking-[0.3em] md:tracking-[0.4em] text-gray-500">#EMPLOYEE</span>
+                        <h1 class="text-base sm:text-xl md:text-3xl font-bold uppercase tracking-wide text-slate-900">
+                            Add New Worker</h1>
                     </div>
                     <button onclick="hide_modal()">
-                        <i class="bi bi-x text-[45px] font-black text-black/20 hover:text-black/40"></i>
+                        <i
+                            class="bi bi-x text-[30px] sm:text-[35px] md:text-[45px] font-black text-black/20 hover:text-black/40"></i>
                     </button>
                 </div>
 
-                <!-- Inputs -->
-                <div class="flex flex-col gap-2.5">
+                <div class="flex flex-col gap-1.5 sm:gap-2 md:gap-2.5">
                     <input id="name_input" type="text"
-                        class="h-[40px] rounded-xl border-2 border-black/20 px-3 text-sm uppercase tracking-wide placeholder:text-center"
+                        class="h-[34px] sm:h-[36px] md:h-[40px] rounded-lg md:rounded-xl border-2 border-black/20 px-2 md:px-3 text-[11px] sm:text-xs md:text-sm uppercase tracking-wide placeholder:text-center"
                         placeholder="Full Name">
 
                     <input id="email_input" type="email"
-                        class="h-[40px] rounded-xl border-2 border-black/20 px-3 text-sm uppercase tracking-wide placeholder:text-center"
+                        class="h-[34px] sm:h-[36px] md:h-[40px] rounded-lg md:rounded-xl border-2 border-black/20 px-2 md:px-3 text-[11px] sm:text-xs md:text-sm uppercase tracking-wide placeholder:text-center"
                         placeholder="Email">
 
                     <input id="phone_input" type="tel"
-                        class="h-[40px] rounded-xl border-2 border-black/20 px-3 text-sm uppercase tracking-wide placeholder:text-center"
+                        class="h-[34px] sm:h-[36px] md:h-[40px] rounded-lg md:rounded-xl border-2 border-black/20 px-2 md:px-3 text-[11px] sm:text-xs md:text-sm uppercase tracking-wide placeholder:text-center"
                         placeholder="Telephone">
 
                     <select id="select_input"
-                        class="h-[40px] rounded-xl border-2 border-black/20 px-3 text-sm uppercase tracking-wide text-gray-600">
+                        class="h-[34px] sm:h-[36px] md:h-[40px] rounded-lg md:rounded-xl border-2 border-black/20 px-2 md:px-3 text-[11px] sm:text-xs md:text-sm uppercase tracking-wide text-gray-600">
                         <option value="" disabled selected>Choose ROLE</option>
                         <option value="Receptionist">Receptionist</option>
                         <option value="Technician">IT Technician</option>
@@ -130,148 +142,148 @@
                     </select>
                 </div>
 
-                <!-- Avatar -->
-                <div class="flex flex-col items-center gap-2.5">
+                <div class="flex flex-col items-center gap-1.5 sm:gap-2 md:gap-2.5">
                     <img id="emplyee_image_preview"
                         src="https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg"
-                        class="h-[110px] w-[110px] rounded-full border-2 border-black object-cover shadow-sm">
+                        class="h-[70px] w-[70px] sm:h-[80px] sm:w-[80px] md:h-[110px] md:w-[110px] rounded-full border-2 border-black object-cover shadow-sm">
 
                     <input id="image_input" type="text"
-                        class="h-[40px] w-full rounded-xl border-2 border-black/20 px-3 text-sm uppercase tracking-wide placeholder:text-center"
+                        class="h-[34px] sm:h-[36px] md:h-[40px] w-full rounded-lg md:rounded-xl border-2 border-black/20 px-2 md:px-3 text-[11px] sm:text-xs md:text-sm uppercase tracking-wide placeholder:text-center"
                         placeholder="Photo (URL)">
                 </div>
 
-                <!-- Experience -->
-                <div id="container_input" class="container flex overflow-y-auto max-h-[600px] w-full flex flex-col">
+                <div id="container_input"
+                    class="container flex overflow-y-auto max-h-[35vh] sm:max-h-[300px] md:max-h-[600px] w-full flex flex-col">
 
-                    <div class="flex flex-col gap-2.5 rounded-2xl border border-black/10 bg-slate-50/80 p-3">
-                        <p class="text-xs font-semibold uppercase tracking-[0.35em] text-slate-500">Experience</p>
+                    <div
+                        class="flex flex-col gap-1.5 sm:gap-2 md:gap-2.5 rounded-xl md:rounded-2xl border border-black/10 bg-slate-50/80 p-2 md:p-3">
+                        <p
+                            class="text-[9px] sm:text-[10px] md:text-xs font-semibold uppercase tracking-[0.2em] sm:tracking-[0.25em] md:tracking-[0.35em] text-slate-500">
+                            Experience</p>
 
                         <input id="title_0" type="text"
-                            class="h-[40px] rounded-xl border-2 border-black/20 px-3 text-xs uppercase tracking-[0.2em] placeholder:text-center"
+                            class="h-[32px] sm:h-[34px] md:h-[40px] rounded-lg md:rounded-xl border-2 border-black/20 px-2 md:px-3 text-[10px] md:text-xs uppercase tracking-[0.15em] md:tracking-[0.2em] placeholder:text-center"
                             placeholder="Title (e.g., Lead Receptionist)">
 
                         <textarea id="desc_0"
-                            class="min-h-[80px] rounded-xl border-2 border-black/20 px-3 py-2 text-xs uppercase tracking-[0.2em] placeholder:text-center"
+                            class="min-h-[50px] sm:min-h-[60px] md:min-h-[80px] rounded-lg md:rounded-xl border-2 border-black/20 px-2 md:px-3 py-1.5 md:py-2 text-[10px] md:text-xs uppercase tracking-[0.15em] md:tracking-[0.2em] placeholder:text-center"
                             placeholder="Description of responsibilities"></textarea>
 
-                        <div class="grid grid-cols-2 gap-3">
+                        <div class="grid grid-cols-2 gap-1.5 sm:gap-2 md:gap-3">
                             <label
-                                class="flex flex-col text-[10px] font-semibold uppercase tracking-[0.3em] text-gray-500">
+                                class="flex flex-col text-[8px] sm:text-[9px] md:text-[10px] font-semibold uppercase tracking-[0.15em] sm:tracking-[0.2em] md:tracking-[0.3em] text-gray-500">
                                 From
                                 <input id="startdate_0" type="date" value="2023-01-01"
-                                    class="h-[38px] rounded-xl border-2 border-black/20 px-2.5 text-xs uppercase tracking-[0.2em]">
+                                    class="h-[32px] sm:h-[34px] md:h-[38px] rounded-lg md:rounded-xl border-2 border-black/20 px-1.5 md:px-2.5 text-[9px] sm:text-[10px] md:text-xs uppercase tracking-[0.1em] sm:tracking-[0.15em] md:tracking-[0.2em]">
                             </label>
 
                             <label
-                                class="flex flex-col text-[10px] font-semibold uppercase tracking-[0.3em] text-gray-500">
+                                class="flex flex-col text-[8px] sm:text-[9px] md:text-[10px] font-semibold uppercase tracking-[0.15em] sm:tracking-[0.2em] md:tracking-[0.3em] text-gray-500">
                                 To
                                 <input id="enddate_0" type="date" value="2024-12-31"
-                                    class="h-[38px] rounded-xl border-2 border-black/20 px-2.5 text-xs uppercase tracking-[0.2em]">
+                                    class="h-[32px] sm:h-[34px] md:h-[38px] rounded-lg md:rounded-xl border-2 border-black/20 px-1.5 md:px-2.5 text-[9px] sm:text-[10px] md:text-xs uppercase tracking-[0.1em] sm:tracking-[0.15em] md:tracking-[0.2em]">
                             </label>
                         </div>
                     </div>
 
                     <button id="addexp_btn"
-                        class="mt-2 rounded-xl border-2 border-dashed border-black/30 px-4 py-3 text-xs font-semibold uppercase tracking-[0.35em] text-gray-600 transition hover:border-black hover:text-black">
+                        class="mt-1.5 sm:mt-2 rounded-lg md:rounded-xl border-2 border-dashed border-black/30 px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 md:py-3 text-[9px] sm:text-[10px] md:text-xs font-semibold uppercase tracking-[0.2em] sm:tracking-[0.25em] md:tracking-[0.35em] text-gray-600 transition hover:border-black hover:text-black">
                         Add experience entry
                     </button>
                 </div>
 
                 <button id="submit_btn"
-                    class="w-full rounded-xl bg-black py-2.5 text-sm font-semibold uppercase tracking-[0.35em] text-white transition hover:bg-black/80">
+                    class="w-full rounded-lg md:rounded-xl bg-black py-1.5 sm:py-2 md:py-2.5 text-[11px] sm:text-xs md:text-sm font-semibold uppercase tracking-[0.2em] sm:tracking-[0.25em] md:tracking-[0.35em] text-white transition hover:bg-black/80">
                     Add new worker
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- Main Layout -->
-    <div class="flex min-h-screen w-full flex-col-reverse md:flex-row">
+    <div class="flex min-h-screen w-full flex-col-reverse md:flex-col-reverse lg:flex-row">
 
-        <!-- Sidebar -->
         <div
-            class="flex flex-col gap-6 border-r border-indigo-200/80 bg-gradient-to-b from-indigo-100 via-slate-100 to-white p-4 shadow-lg md:w-1/4">
-            <div id="container_sidebar" class="flex flex-row flex-wrap gap-4 md:flex-col"></div>
+            class="flex flex-col gap-2 sm:gap-3 md:gap-4 border-r border-indigo-200/80 bg-gradient-to-b from-indigo-100 via-slate-100 to-white p-2 sm:p-3 md:p-4 shadow-lg w-full md:w-full lg:w-1/4">
+            <div id="container_sidebar" class="flex flex-row flex-wrap gap-2 sm:gap-3 md:gap-4 lg:flex-col"></div>
 
             <div class="mt-auto">
                 <button onclick="show_modal()"
-                    class="w-full rounded-lg bg-black px-4 py-2 text-sm font-semibold uppercase tracking-wide text-white transition hover:bg-black/80">
+                    class="w-full rounded-lg bg-black px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 text-[10px] sm:text-xs md:text-sm font-semibold uppercase tracking-wide text-white transition hover:bg-black/80">
                     Add new worker
                 </button>
             </div>
         </div>
 
-        <!-- Rooms -->
-        <main class="flex flex-1 items-center justify-center bg-white p-4">
-            <section class="flex w-full max-w-5xl items-center justify-center">
-                <div class="grid h-[90vh] w-full grid-cols-9 grid-rows-[repeat(8,minmax(0,1fr))] border-4 border-black">
+        <main class="flex flex-1 items-center justify-center bg-white p-1 sm:p-2 md:p-3 lg:p-4">
+            <section class="flex w-full h-full items-center justify-center overflow-auto">
+                <div
+                    class="grid min-h-[320px] sm:min-h-[380px] md:min-h-[400px] h-[60vh] sm:h-[70vh] md:h-[80vh] lg:h-[90vh] w-full min-w-[500px] sm:min-w-[550px] md:min-w-0 md:max-w-5xl lg:max-w-6xl grid-cols-9 grid-rows-[repeat(8,minmax(0,1fr))] border border-black sm:border-2 md:border-4">
 
-                    <!-- Conference Room -->
                     <div id="room1"
-                        class="col-span-4 col-start-1 row-span-3 row-start-1 flex flex-col items-center justify-between border-4 border-black bg-orange-200/70 p-4 text-center font-semibold uppercase tracking-wide ">
-                        <div class="top flex gap-5 items-center">
-                            <div class="text-xl">Conference Room</div>
-                            <i class="bi bi-plus-lg cursor-pointer text-3xl text-black/60 border-2 border-black rounded-full p-1 hover:bg-black hover:text-white"
+                        class="col-span-4 col-start-1 row-span-3 row-start-1 flex flex-col items-center justify-between border border-black sm:border-2 md:border-4 bg-orange-200/70 p-1 sm:p-2 md:p-3 lg:p-4 text-center font-semibold uppercase tracking-wide">
+                        <div class="top flex gap-1 sm:gap-2 md:gap-5 items-center">
+                            <div class="text-[10px] sm:text-xs md:text-base lg:text-xl">Conference Room</div>
+                            <i class="bi bi-plus-lg cursor-pointer text-sm sm:text-base md:text-xl lg:text-3xl text-black/60 border border-black sm:border-2 rounded-full p-0.5 sm:p-0.5 md:p-1 hover:bg-black hover:text-white"
                                 onclick="openAssignModal('room1')"></i>
                         </div>
-                        <div id="room" data-room-id="room1" class="middle h-full w-full grid-cols-3 grid gap-4 mt-4">
+                        <div id="room" data-room-id="room1"
+                            class="middle h-full w-full grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-1 sm:gap-2 md:gap-3 lg:gap-4 mt-1 sm:mt-2 md:mt-3 lg:mt-4">
 
                         </div>
 
                     </div>
 
-                    <!-- Server Room -->
                     <div id="room2"
-                        class="col-span-2 col-start-6 row-span-3 row-start-1 flex flex-col items-center justify-between border-4 border-black bg-blue-200/70 p-4 text-center font-semibold uppercase tracking-wide">
-                        <div>Server Room</div>
-                        <i class="bi bi-plus-lg cursor-pointer text-3xl text-black/60 border-2 border-black rounded-full p-1 hover:bg-black hover:text-white"
+                        class="col-span-2 col-start-6 row-span-3 row-start-1 flex flex-col items-center justify-between border border-black sm:border-2 md:border-4 bg-blue-200/70 p-1 sm:p-2 md:p-3 lg:p-4 text-center font-semibold uppercase tracking-wide">
+                        <div class="text-[9px] sm:text-[10px] md:text-xs lg:text-base">Server Room</div>
+                        <i class="bi bi-plus-lg cursor-pointer text-xs sm:text-sm md:text-xl lg:text-3xl text-black/60 border border-black sm:border-2 rounded-full p-0.5 md:p-1 hover:bg-black hover:text-white"
                             onclick="openAssignModal('room2')"></i>
-                        <div id="room" data-room-id="room2" class="middle h-full w-full grid-cols-3 grid gap-4 mt-4">
+                        <div id="room" data-room-id="room2"
+                            class="middle h-full w-full grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-1 sm:gap-2 md:gap-3 lg:gap-4 mt-1 sm:mt-2 md:mt-3 lg:mt-4">
 
                         </div>
                     </div>
 
-                    <!-- Security Room -->
                     <div id="room3"
-                        class="col-span-2 col-start-8 row-span-3 row-start-1 flex flex-col items-center justify-between border-4 border-black bg-rose-300/70 p-4 text-center font-semibold uppercase tracking-wide ">
-                        <div>Security Room</div>
-                        <i class="bi bi-plus-lg cursor-pointer text-3xl text-black/60 border-2 border-black rounded-full p-1 hover:bg-black hover:text-white"
+                        class="col-span-2 col-start-8 row-span-3 row-start-1 flex flex-col items-center justify-between border border-black sm:border-2 md:border-4 bg-rose-300/70 p-1 sm:p-2 md:p-3 lg:p-4 text-center font-semibold uppercase tracking-wide">
+                        <div class="text-[9px] sm:text-[10px] md:text-xs lg:text-base">Security Room</div>
+                        <i class="bi bi-plus-lg cursor-pointer text-xs sm:text-sm md:text-xl lg:text-3xl text-black/60 border border-black sm:border-2 rounded-full p-0.5 md:p-1 hover:bg-black hover:text-white"
                             onclick="openAssignModal('room3')"></i>
-                        <div id="room" data-room-id="room3" class="middle h-full w-full grid-cols-3 grid gap-4 mt-4">
+                        <div id="room" data-room-id="room3"
+                            class="middle h-full w-full grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-1 sm:gap-2 md:gap-3 lg:gap-4 mt-1 sm:mt-2 md:mt-3 lg:mt-4">
 
                         </div>
                     </div>
 
-                    <!-- Reception -->
                     <div id="room4"
-                        class="col-span-4 col-start-1 row-span-5 row-start-4 flex flex-col items-center justify-between border-4 border-black bg-yellow-200/70 p-4 text-center font-semibold uppercase tracking-wide ">
-                        <div>Reception</div>
-                        <i class="bi bi-plus-lg cursor-pointer text-3xl text-black/60 border-2 border-black rounded-full p-1 hover:bg-black hover:text-white"
+                        class="col-span-4 col-start-1 row-span-5 row-start-4 flex flex-col items-center justify-between border border-black sm:border-2 md:border-4 bg-yellow-200/70 p-1 sm:p-2 md:p-3 lg:p-4 text-center font-semibold uppercase tracking-wide">
+                        <div class="text-[9px] sm:text-[10px] md:text-xs lg:text-base">Reception</div>
+                        <i class="bi bi-plus-lg cursor-pointer text-xs sm:text-sm md:text-xl lg:text-3xl text-black/60 border border-black sm:border-2 rounded-full p-0.5 md:p-1 hover:bg-black hover:text-white"
                             onclick="openAssignModal('room4')"></i>
-                        <div id="room" data-room-id="room4" class="middle h-full w-full grid-cols-3 grid gap-4 mt-4">
+                        <div id="room" data-room-id="room4"
+                            class="middle h-full w-full grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-1 sm:gap-2 md:gap-3 lg:gap-4 mt-1 sm:mt-2 md:mt-3 lg:mt-4">
 
                         </div>
                     </div>
 
-                    <!-- Staff Room -->
                     <div id="room5"
-                        class="col-span-2 col-start-6 row-span-3 row-start-6 flex flex-col items-center justify-between border-4 border-black bg-orange-300/70 p-4 text-center font-semibold uppercase tracking-wide ">
-                        <div>Staff Room</div>
-                        <i class="bi bi-plus-lg cursor-pointer text-3xl text-black/60 border-2 border-black rounded-full p-1 hover:bg-black hover:text-white"
+                        class="col-span-2 col-start-6 row-span-3 row-start-6 flex flex-col items-center justify-between border border-black sm:border-2 md:border-4 bg-orange-300/70 p-1 sm:p-2 md:p-3 lg:p-4 text-center font-semibold uppercase tracking-wide">
+                        <div class="text-[9px] sm:text-[10px] md:text-xs lg:text-base">Staff Room</div>
+                        <i class="bi bi-plus-lg cursor-pointer text-xs sm:text-sm md:text-xl lg:text-3xl text-black/60 border border-black sm:border-2 rounded-full p-0.5 md:p-1 hover:bg-black hover:text-white"
                             onclick="openAssignModal('room5')"></i>
-                        <div id="room" data-room-id="room5" class="middle h-full w-full grid-cols-3 grid gap-4 mt-4">
+                        <div id="room" data-room-id="room5"
+                            class="middle h-full w-full grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-1 sm:gap-2 md:gap-3 lg:gap-4 mt-1 sm:mt-2 md:mt-3 lg:mt-4">
 
                         </div>
                     </div>
 
-                    <!-- Archive Room -->
                     <div id="room6"
-                        class="col-span-2 col-start-8 row-span-3 row-start-6 flex flex-col items-center justify-between border-4 border-black bg-emerald-300/70 p-4 text-center font-semibold uppercase tracking-wide ">
-                        <div>Archive Room</div>
-                        <i class="bi bi-plus-lg cursor-pointer text-3xl text-black/60 border-2 border-black rounded-full p-1 hover:bg-black hover:text-white"
+                        class="col-span-2 col-start-8 row-span-3 row-start-6 flex flex-col items-center justify-between border border-black sm:border-2 md:border-4 bg-emerald-300/70 p-1 sm:p-2 md:p-3 lg:p-4 text-center font-semibold uppercase tracking-wide">
+                        <div class="text-[9px] sm:text-[10px] md:text-xs lg:text-base">Archive Room</div>
+                        <i class="bi bi-plus-lg cursor-pointer text-xs sm:text-sm md:text-xl lg:text-3xl text-black/60 border border-black sm:border-2 rounded-full p-0.5 md:p-1 hover:bg-black hover:text-white"
                             onclick="openAssignModal('room6')"></i>
-                        <div id="room" data-room-id="room6" class="middle h-full w-full grid-cols-3 grid gap-4 mt-4">
+                        <div id="room" data-room-id="room6"
+                            class="middle h-full w-full grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-1 sm:gap-2 md:gap-3 lg:gap-4 mt-1 sm:mt-2 md:mt-3 lg:mt-4">
 
                         </div>
                     </div>
