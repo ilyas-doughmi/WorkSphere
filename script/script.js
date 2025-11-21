@@ -294,15 +294,15 @@ function showemployees(room) {
             break;
 
         case "room2":
-            worker = employees.filter(e => e.role === "Technician" || e.role === "Manager" || e.role === "Maintenance");
+            worker = employees.filter(e => e.role === "Technician" || e.role === "Manager" || e.role === "Nettoyage");
             break;
 
         case "room3":
-            worker = employees.filter(e => e.role === "Security Agent" || e.role === "Manager" || e.role === "Maintenance");
+            worker = employees.filter(e => e.role === "Security Agent" || e.role === "Manager" || e.role === "Nettoyage");
             break;
 
         case "room4":
-            worker = employees.filter(e => e.role === "Receptionist" || e.role === "Manager" || e.role === "Maintenance");
+            worker = employees.filter(e => e.role === "Receptionist" || e.role === "Manager" || e.role === "Nettoyage");
             break;
 
         case "room5":
@@ -310,7 +310,7 @@ function showemployees(room) {
             break;
 
         case "room6":
-            worker = employees.filter(e => e.role == "Manager" || e.role === "Technician");
+            worker = employees.filter(e => e.role == "Manager");
             break;
 
         default:
@@ -339,7 +339,15 @@ window.spawn = function (id_user) {
     syncEmployees();
     trackRooms();
 
-    if (room_count[selectedRoom] >= 6) {
+    const room_limits = {
+        room1: 6,
+        room2: 2,
+        room3: 2,
+        room4: 2,
+        room5: 2,
+        room6: 2
+    };
+    if (room_count[selectedRoom] >= room_limits[selectedRoom]) {
         alert("This room is full!");
         return;
     }

@@ -24,7 +24,7 @@ WorkSphere est une application web interactive permettant de gérer et d’organ
 ### Règles métier
 
 * Les employés ne peuvent accéder qu’aux zones autorisées selon leur rôle.
-* Les Managers et l'équipe de Maintenance disposent d’un accès élargi.
+* Les Managers et l'équipe de Nettoyage disposent d’un accès élargi.
 * Les salles critiques apparaissent en rouge lorsqu’elles sont vides.
 * Chaque salle possède une capacité maximale configurable.
 
