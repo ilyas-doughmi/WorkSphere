@@ -2,7 +2,7 @@ import { save, load } from "./modules/localstorage.js";
 import { validate_exp } from "./modules/validator.js";
 
 let employees = load() || [];
-let employee_id = 1;
+let employee_id = 0; 
 let id = Date.now();
 let room_count = {
     room1: 0,
@@ -34,6 +34,34 @@ function trackRooms() {
     });
 }
 
+function addExperienceBlock(index) {
+    const addexp_btn = document.getElementById("addexp_btn");
+    const input_field = `
+        <div class="exp-field flex flex-col gap-1.5 sm:gap-2 md:gap-2.5 rounded-xl md:rounded-2xl border border-black/10 bg-slate-50/80 p-2 md:p-3 mt-2 relative group">
+            <p class="text-[9px] sm:text-[10px] md:text-xs font-semibold uppercase tracking-[0.2em] sm:tracking-[0.25em] md:tracking-[0.35em] text-slate-500">Experience #${index + 1}</p>
+            
+            <input id="title_${index}" type="text" 
+                class="h-[32px] sm:h-[34px] md:h-[40px] rounded-lg md:rounded-xl border-2 border-black/20 px-2 md:px-3 text-[10px] md:text-xs uppercase tracking-[0.15em] md:tracking-[0.2em] placeholder:text-center" 
+                placeholder="Title (e.g., Lead Receptionist)">
+            
+            <textarea id="desc_${index}" 
+                class="min-h-[50px] sm:min-h-[60px] md:min-h-[80px] rounded-lg md:rounded-xl border-2 border-black/20 px-2 md:px-3 py-1.5 md:py-2 text-[10px] md:text-xs uppercase tracking-[0.15em] md:tracking-[0.2em] placeholder:text-center" 
+                placeholder="Description"></textarea>
+            
+            <div class="grid grid-cols-2 gap-1.5 sm:gap-2 md:gap-3">
+                <label class="flex flex-col text-[8px] sm:text-[9px] md:text-[10px] font-semibold uppercase tracking-[0.15em] sm:tracking-[0.2em] md:tracking-[0.3em] text-gray-500">
+                    From
+                    <input type="date" id="startdate_${index}" class="h-[32px] sm:h-[34px] md:h-[38px] rounded-lg md:rounded-xl border-2 border-black/20 px-1.5 md:px-2.5 text-[9px] sm:text-[10px] md:text-xs uppercase tracking-[0.1em] sm:tracking-[0.15em] md:tracking-[0.2em]">
+                </label>
+                <label class="flex flex-col text-[8px] sm:text-[9px] md:text-[10px] font-semibold uppercase tracking-[0.15em] sm:tracking-[0.2em] md:tracking-[0.3em] text-gray-500">
+                    To
+                    <input type="date" id="enddate_${index}" class="h-[32px] sm:h-[34px] md:h-[38px] rounded-lg md:rounded-xl border-2 border-black/20 px-1.5 md:px-2.5 text-[9px] sm:text-[10px] md:text-xs uppercase tracking-[0.1em] sm:tracking-[0.15em] md:tracking-[0.2em]">
+                </label>
+            </div>
+        </div>`;
+    addexp_btn.insertAdjacentHTML("beforebegin", input_field);
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     const addworker_modal = document.getElementById("addworker_modal");
     const name_input = document.getElementById("name_input");
@@ -43,23 +71,25 @@ document.addEventListener("DOMContentLoaded", () => {
     const image_input = document.getElementById("image_input");
     const image_handler = document.getElementById("emplyee_image_preview");
     const submit_btn = document.getElementById("submit_btn");
-
     const addexp_btn = document.getElementById("addexp_btn");
 
     window.hide_modal = function () {
         addworker_modal.classList.add("hidden");
-           name_input.value = "";
+        name_input.value = "";
         email_input.value = "";
         phone_input.value = "";
         select_input.value = "";
         image_input.value = "";
         image_handler.src = "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg";
-        
+
         document.querySelectorAll(".exp-field").forEach(e => e.remove());
+        employee_id = 0;
     };
 
     window.show_modal = function () {
         addworker_modal.classList.remove("hidden");
+        addExperienceBlock(0);
+        employee_id = 1;
     };
 
     renderRooms();
@@ -73,28 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     addexp_btn.addEventListener("click", () => {
-        const input_field = `
-            <div class="exp-field flex flex-col gap-2.5 rounded-2xl border border-black/10 bg-slate-50/80 p-3 mt-2 relative group">
-                <p class="text-xs font-semibold uppercase tracking-[0.35em] text-slate-500">Experience #${employee_id + 1}</p>
-                <input id="title_${employee_id}" type="text" 
-                    class="h-[40px] rounded-xl border-2 border-black/20 px-3 text-xs uppercase tracking-[0.2em] placeholder:text-center" 
-                    placeholder="Title">
-                <textarea id="desc_${employee_id}" 
-                    class="min-h-[80px] rounded-xl border-2 border-black/20 px-3 py-2 text-xs uppercase tracking-[0.2em] placeholder:text-center" 
-                    placeholder="Description"></textarea>
-                <div class="grid grid-cols-2 gap-3">
-                    <label class="flex flex-col gap-1 text-[10px] font-semibold uppercase tracking-[0.3em] text-gray-500">
-                        From
-                        <input type="date" id="startdate_${employee_id}" class="h-[38px] rounded-xl border-2 border-black/20 px-2.5 text-xs uppercase tracking-[0.2em]">
-                    </label>
-                    <label class="flex flex-col gap-1 text-[10px] font-semibold uppercase tracking-[0.3em] text-gray-500">
-                        To
-                        <input type="date" id="enddate_${employee_id}" class="h-[38px] rounded-xl border-2 border-black/20 px-2.5 text-xs uppercase tracking-[0.2em]">
-                    </label>
-                </div>
-            </div>`;
-
-        addexp_btn.insertAdjacentHTML("beforebegin", input_field);
+        addExperienceBlock(employee_id);
         employee_id++;
     });
 
@@ -107,7 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
             email: email_input.value || "---",
             phone: phone_input.value || "---",
             image: image_input.value || "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg",
-            role: select_input.value || "---",
+            role: select_input.value,
             isInRoom: false,
             roomId: null,
             exp: []
@@ -118,6 +127,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (newEmployee.fullname.length < 3) {
             alert("Name must be at least 3 characters");
+            return;
+        }
+
+        if(newEmployee.role == ""){
+            alert("Choose a Role");
             return;
         }
         if (!emailRegex.test(newEmployee.email)) {
@@ -164,19 +178,10 @@ document.addEventListener("DOMContentLoaded", () => {
         employees.push(newEmployee);
         save(employees);
 
-        name_input.value = "";
-        email_input.value = "";
-        phone_input.value = "";
-        select_input.value = "";
-        image_input.value = "";
-        image_handler.src = "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg";
-        
-        document.querySelectorAll(".exp-field").forEach(e => e.remove());
+        window.hide_modal();
         
         id = Date.now();
-        employee_id = 1;
-
-        window.hide_modal();
+        
         renderSidebar();
         renderRooms();
     });
@@ -265,7 +270,7 @@ window.show_info = function (id_user) {
         } else {
             info_experience_list.innerHTML = `
             <li class="rounded-xl border border-dashed border-black/20 p-3 text-center text-xs uppercase tracking-[0.3em] text-gray-500">
-                No experience added yet.
+                No experience added
             </li>`;
         }
 
@@ -325,7 +330,7 @@ function showemployees(room) {
 
 function spawn_elements(worker) {
     worker.forEach(function (e) {
-        const card = `<div class="mb-3 card h-[6vh] bg-gray-400/30 w-full rounded-lg flex gap-4 items-center border-black border-2" id="${e.id}" onclick="spawn(${e.id})">
+        const card = `<div class="mb-3 card h-[14vh] shadow-xs shadow-black  w-full rounded-lg flex gap-4 items-center border-black border-2" id="${e.id}" onclick="spawn(${e.id})">
                     <img src="${e.image}" alt="" class="ml-4 h-[97%] rounded-full border-2">
                     <div>
                     <h1 class="font-semibold text-[18px] uppercase tracking-[0.2em]">${e.fullname}</h1> 

@@ -33,7 +33,6 @@
         </div>
     </div>
 
-
     <div id="info_modal"
         class="modal fixed overflow-y-auto inset-0 z-50 flex h-full w-full items-center justify-center bg-black/40 p-2 sm:p-3 md:py-4 backdrop-blur-sm hidden">
 
@@ -154,38 +153,6 @@
 
                 <div id="container_input"
                     class="container flex overflow-y-auto max-h-[35vh] sm:max-h-[300px] md:max-h-[600px] w-full flex flex-col">
-
-                    <div
-                        class="flex flex-col gap-1.5 sm:gap-2 md:gap-2.5 rounded-xl md:rounded-2xl border border-black/10 bg-slate-50/80 p-2 md:p-3">
-                        <p
-                            class="text-[9px] sm:text-[10px] md:text-xs font-semibold uppercase tracking-[0.2em] sm:tracking-[0.25em] md:tracking-[0.35em] text-slate-500">
-                            Experience</p>
-
-                        <input id="title_0" type="text"
-                            class="h-[32px] sm:h-[34px] md:h-[40px] rounded-lg md:rounded-xl border-2 border-black/20 px-2 md:px-3 text-[10px] md:text-xs uppercase tracking-[0.15em] md:tracking-[0.2em] placeholder:text-center"
-                            placeholder="Title (e.g., Lead Receptionist)">
-
-                        <textarea id="desc_0"
-                            class="min-h-[50px] sm:min-h-[60px] md:min-h-[80px] rounded-lg md:rounded-xl border-2 border-black/20 px-2 md:px-3 py-1.5 md:py-2 text-[10px] md:text-xs uppercase tracking-[0.15em] md:tracking-[0.2em] placeholder:text-center"
-                            placeholder="Description of responsibilities"></textarea>
-
-                        <div class="grid grid-cols-2 gap-1.5 sm:gap-2 md:gap-3">
-                            <label
-                                class="flex flex-col text-[8px] sm:text-[9px] md:text-[10px] font-semibold uppercase tracking-[0.15em] sm:tracking-[0.2em] md:tracking-[0.3em] text-gray-500">
-                                From
-                                <input id="startdate_0" type="date" value="2023-01-01"
-                                    class="h-[32px] sm:h-[34px] md:h-[38px] rounded-lg md:rounded-xl border-2 border-black/20 px-1.5 md:px-2.5 text-[9px] sm:text-[10px] md:text-xs uppercase tracking-[0.1em] sm:tracking-[0.15em] md:tracking-[0.2em]">
-                            </label>
-
-                            <label
-                                class="flex flex-col text-[8px] sm:text-[9px] md:text-[10px] font-semibold uppercase tracking-[0.15em] sm:tracking-[0.2em] md:tracking-[0.3em] text-gray-500">
-                                To
-                                <input id="enddate_0" type="date" value="2024-12-31"
-                                    class="h-[32px] sm:h-[34px] md:h-[38px] rounded-lg md:rounded-xl border-2 border-black/20 px-1.5 md:px-2.5 text-[9px] sm:text-[10px] md:text-xs uppercase tracking-[0.1em] sm:tracking-[0.15em] md:tracking-[0.2em]">
-                            </label>
-                        </div>
-                    </div>
-
                     <button id="addexp_btn"
                         class="mt-1.5 sm:mt-2 rounded-lg md:rounded-xl border-2 border-dashed border-black/30 px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 md:py-3 text-[9px] sm:text-[10px] md:text-xs font-semibold uppercase tracking-[0.2em] sm:tracking-[0.25em] md:tracking-[0.35em] text-gray-600 transition hover:border-black hover:text-black">
                         Add experience entry
@@ -228,9 +195,7 @@
                         </div>
                         <div id="room" data-room-id="room1"
                             class="middle h-full w-full grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-1 sm:gap-2 md:gap-3 lg:gap-4 mt-1 sm:mt-2 md:mt-3 lg:mt-4">
-
                         </div>
-
                     </div>
 
                     <div id="room2"
@@ -240,7 +205,6 @@
                             onclick="openAssignModal('room2')"></i>
                         <div id="room" data-room-id="room2"
                             class="middle h-full w-full grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-1 sm:gap-2 md:gap-3 lg:gap-4 mt-1 sm:mt-2 md:mt-3 lg:mt-4">
-
                         </div>
                     </div>
 
@@ -251,7 +215,6 @@
                             onclick="openAssignModal('room3')"></i>
                         <div id="room" data-room-id="room3"
                             class="middle h-full w-full grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-1 sm:gap-2 md:gap-3 lg:gap-4 mt-1 sm:mt-2 md:mt-3 lg:mt-4">
-
                         </div>
                     </div>
 
@@ -262,7 +225,6 @@
                             onclick="openAssignModal('room4')"></i>
                         <div id="room" data-room-id="room4"
                             class="middle h-full w-full grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-1 sm:gap-2 md:gap-3 lg:gap-4 mt-1 sm:mt-2 md:mt-3 lg:mt-4">
-
                         </div>
                     </div>
 
@@ -273,7 +235,6 @@
                             onclick="openAssignModal('room5')"></i>
                         <div id="room" data-room-id="room5"
                             class="middle h-full w-full grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-1 sm:gap-2 md:gap-3 lg:gap-4 mt-1 sm:mt-2 md:mt-3 lg:mt-4">
-
                         </div>
                     </div>
 
@@ -284,7 +245,6 @@
                             onclick="openAssignModal('room6')"></i>
                         <div id="room" data-room-id="room6"
                             class="middle h-full w-full grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-1 sm:gap-2 md:gap-3 lg:gap-4 mt-1 sm:mt-2 md:mt-3 lg:mt-4">
-
                         </div>
                     </div>
 
