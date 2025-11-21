@@ -160,7 +160,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         employees.push(newEmployee);
         save(employees);
-
+        window.location.reload();
         window.hide_modal();
         renderSidebar();
         renderRooms();
