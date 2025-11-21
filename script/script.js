@@ -1,5 +1,5 @@
 import { save, load } from "./modules/localstorage.js";
-import { validator, validate_exp } from "./modules/validator.js";
+import { validate_exp } from "./modules/validator.js";
 
 let employees = load() || [];
 let employee_id = 1;
@@ -36,8 +36,6 @@ function trackRooms() {
 
 document.addEventListener("DOMContentLoaded", () => {
     const addworker_modal = document.getElementById("addworker_modal");
-    const container_sidebar = document.getElementById("container_sidebar");
-
     const name_input = document.getElementById("name_input");
     const email_input = document.getElementById("email_input");
     const phone_input = document.getElementById("phone_input");
@@ -50,6 +48,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     window.hide_modal = function () {
         addworker_modal.classList.add("hidden");
+           name_input.value = "";
+        email_input.value = "";
+        phone_input.value = "";
+        select_input.value = "";
+        image_input.value = "";
+        image_handler.src = "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg";
+        
+        document.querySelectorAll(".exp-field").forEach(e => e.remove());
     };
 
     window.show_modal = function () {
