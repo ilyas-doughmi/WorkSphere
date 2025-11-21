@@ -409,7 +409,7 @@ function renderRooms() {
     const room_colors = {
         room1: "bg-orange-200/70",
         room2: "bg-blue-200/70",
-        room3: "bg-rose-300/70",
+        room3: "bg-green-300/70",
         room4: "bg-yellow-200/70",
         room5: "bg-orange-300/70",
         room6: "bg-emerald-300/70"
