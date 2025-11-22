@@ -11,21 +11,21 @@
 </head>
 
 <body class="min-h-screen bg-white font-sans text-gray-900">
+
     <div id="assign_modal"
         class="fixed inset-0 z-50 hidden bg-black/40 backdrop-blur-sm flex items-center justify-center p-2 sm:p-3 md:px-4">
 
-        <div
-            class="w-full max-w-[90vw] sm:max-w-[350px] md:max-w-[450px] max-h-[90vh] overflow-y-auto bg-white border-2 md:border-4 border-black/80 rounded-xl md:rounded-2xl p-3 sm:p-3 md:p-4 shadow-2xl">
+        <div class="w-full max-w-[90vw] sm:max-w-[350px] md:max-w-[450px] max-h-[90vh] overflow-y-auto bg-white border-2 md:border-4 border-black/80 rounded-xl md:rounded-2xl p-3 sm:p-3 md:p-4 shadow-2xl">
             <div class="flex items-center justify-between border-b border-black/10 pb-2 md:pb-3">
                 <h2 class="text-sm sm:text-base md:text-xl font-bold uppercase tracking-wide">Assign Worker</h2>
-                <button onclick="closeAssignModal()">
+                <button onclick="close_assign()">
                     <i class="bi bi-x text-[28px] sm:text-[30px] md:text-[40px] text-black/30 hover:text-black/60"></i>
                 </button>
             </div>
 
-            <p
-                class="text-[9px] sm:text-[10px] md:text-xs uppercase text-gray-500 tracking-[0.2em] md:tracking-[0.3em] mt-2 mb-2 md:mb-3">
-                Choose a worker</p>
+            <p class="text-[9px] sm:text-[10px] md:text-xs uppercase text-gray-500 tracking-[0.2em] md:tracking-[0.3em] mt-2 mb-2 md:mb-3">
+                Choose a worker
+            </p>
 
             <div id="assign_workers_list"
                 class="mt-2 md:mt-3 max-h-[40vh] sm:max-h-[250px] md:max-h-[300px] overflow-y-auto flex flex-col gap-2 p-1.5 md:p-2 border border-black/10 rounded-lg md:rounded-xl bg-slate-50/70">
@@ -36,24 +36,19 @@
     <div id="info_modal"
         class="modal fixed overflow-y-auto inset-0 z-50 flex h-full w-full items-center justify-center bg-black/40 p-2 sm:p-3 md:py-4 backdrop-blur-sm hidden">
 
-        <div
-            class="w-full max-w-[95vw] sm:max-w-[340px] md:max-w-[520px] max-h-[95vh] overflow-y-auto rounded-lg md:rounded-[12px] border-2 md:border-4 border-black/80 bg-white shadow-2xl">
+        <div class="w-full max-w-[95vw] sm:max-w-[340px] md:max-w-[520px] max-h-[95vh] overflow-y-auto rounded-lg md:rounded-[12px] border-2 md:border-4 border-black/80 bg-white shadow-2xl">
             <div class="flex flex-col gap-2 sm:gap-3 md:gap-5 p-2.5 sm:p-3 md:p-5">
                 <div class="flex items-start justify-between border-b border-black/10 pb-2 md:pb-4">
                     <div class="flex flex-col gap-0.5 sm:gap-1">
-                        <span
-                            class="text-[8px] sm:text-[9px] md:text-xs font-semibold uppercase tracking-[0.25em] sm:tracking-[0.3em] md:tracking-[0.4em] text-gray-500">#EMPLOYEE</span>
-                        <h2 id="info_name"
-                            class="text-base sm:text-xl md:text-3xl font-bold uppercase tracking-wide text-slate-900">
+                        <span class="text-[8px] sm:text-[9px] md:text-xs font-semibold uppercase tracking-[0.25em] sm:tracking-[0.3em] md:tracking-[0.4em] text-gray-500">#EMPLOYEE</span>
+                        <h2 id="info_name" class="text-base sm:text-xl md:text-3xl font-bold uppercase tracking-wide text-slate-900">
                             name</h2>
-                        <p id="info_role"
-                            class="text-[9px] sm:text-[10px] md:text-xs font-semibold uppercase tracking-[0.2em] sm:tracking-[0.25em] md:tracking-[0.35em] text-gray-500">
+                        <p id="info_role" class="text-[9px] sm:text-[10px] md:text-xs font-semibold uppercase tracking-[0.2em] sm:tracking-[0.25em] md:tracking-[0.35em] text-gray-500">
                             role
                         </p>
                     </div>
                     <button id="close_info_modal">
-                        <i
-                            class="bi bi-x text-[30px] sm:text-[35px] md:text-[45px] font-black text-black/20 hover:text-black/40 hover:cursor-pointer"></i>
+                        <i class="bi bi-x text-[30px] sm:text-[35px] md:text-[45px] font-black text-black/20 hover:text-black/40 hover:cursor-pointer"></i>
                     </button>
                 </div>
 
@@ -62,12 +57,10 @@
                         src="https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg"
                         class="h-[70px] w-[70px] sm:h-[90px] sm:w-[90px] md:h-[120px] md:w-[120px] rounded-full border-2 border-black object-cover shadow-sm">
 
-                    <div
-                        class="grid grid-cols-3 gap-1.5 sm:gap-2 md:gap-3 w-full text-center text-xs font-semibold uppercase tracking-[0.15em] sm:tracking-[0.2em] md:tracking-[0.3em]">
+                    <div class="grid grid-cols-3 gap-1.5 sm:gap-2 md:gap-3 w-full text-center text-xs font-semibold uppercase tracking-[0.15em] sm:tracking-[0.2em] md:tracking-[0.3em]">
                         <div class="rounded-lg md:rounded-xl border border-black/10 p-1.5 sm:p-2 md:p-3">
                             <p class="text-[8px] sm:text-[9px] md:text-[10px] text-gray-500">Email</p>
-                            <p id="info_email" class="text-[9px] sm:text-[10px] md:text-sm tracking-wide break-all">---
-                            </p>
+                            <p id="info_email" class="text-[9px] sm:text-[10px] md:text-sm tracking-wide break-all">---</p>
                         </div>
                         <div class="rounded-lg md:rounded-xl border border-black/10 p-1.5 sm:p-2 md:p-3">
                             <p class="text-[8px] sm:text-[9px] md:text-[10px] text-gray-500">Phone</p>
@@ -81,13 +74,11 @@
                 </div>
 
                 <div class="flex flex-col gap-1 sm:gap-1.5 md:gap-2">
-                    <p
-                        class="text-[9px] sm:text-[10px] md:text-xs font-semibold uppercase tracking-[0.2em] sm:tracking-[0.25em] md:tracking-[0.35em] text-gray-500">
+                    <p class="text-[9px] sm:text-[10px] md:text-xs font-semibold uppercase tracking-[0.2em] sm:tracking-[0.25em] md:tracking-[0.35em] text-gray-500">
                         Experience</p>
                     <ul id="info_experience"
                         class="flex max-h-[30vh] sm:max-h-[180px] md:max-h-[250px] flex-col gap-1 sm:gap-1.5 md:gap-2 overflow-y-auto rounded-xl md:rounded-2xl border border-black/10 bg-slate-50/80 p-1.5 sm:p-2 md:p-3">
-                        <li
-                            class="rounded-lg md:rounded-xl border border-dashed border-black/20 p-1.5 sm:p-2 md:p-3 text-center text-[9px] sm:text-[10px] md:text-xs uppercase tracking-[0.15em] sm:tracking-[0.2em] md:tracking-[0.3em] text-gray-500">
+                        <li class="rounded-lg md:rounded-xl border border-dashed border-black/20 p-1.5 sm:p-2 md:p-3 text-center text-[9px] sm:text-[10px] md:text-xs uppercase tracking-[0.15em] sm:tracking-[0.2em] md:tracking-[0.3em] text-gray-500">
                             No experience added yet.
                         </li>
                     </ul>
@@ -100,19 +91,16 @@
     <div id="addworker_modal"
         class="modal fixed overflow-y-auto inset-0 z-50 flex h-full w-full items-center justify-center bg-black/40 p-2 sm:p-3 md:py-4 backdrop-blur-sm hidden">
 
-        <div
-            class="w-full max-w-[95vw] sm:max-w-[340px] md:max-w-[460px] lg:max-w-[520px] max-h-[95vh] overflow-y-auto rounded-lg md:rounded-[12px] border-2 md:border-4 border-black/80 bg-white shadow-2xl">
+        <div class="w-full max-w-[95vw] sm:max-w-[340px] md:max-w-[460px] lg:max-w-[520px] max-h-[95vh] overflow-y-auto rounded-lg md:rounded-[12px] border-2 md:border-4 border-black/80 bg-white shadow-2xl">
             <div class="flex flex-col gap-2 sm:gap-3 md:gap-4 p-2.5 sm:p-3 md:p-4">
                 <div class="flex items-center justify-between border-b border-black/10 pb-2 md:pb-3">
                     <div class="flex flex-col gap-0.5 md:gap-1">
-                        <span
-                            class="text-[8px] sm:text-[9px] md:text-xs font-semibold uppercase tracking-[0.25em] sm:tracking-[0.3em] md:tracking-[0.4em] text-gray-500">#EMPLOYEE</span>
+                        <span class="text-[8px] sm:text-[9px] md:text-xs font-semibold uppercase tracking-[0.25em] sm:tracking-[0.3em] md:tracking-[0.4em] text-gray-500">#EMPLOYEE</span>
                         <h1 class="text-base sm:text-xl md:text-3xl font-bold uppercase tracking-wide text-slate-900">
                             Add New Worker</h1>
                     </div>
-                    <button onclick="hide_modal()">
-                        <i
-                            class="bi bi-x text-[30px] sm:text-[35px] md:text-[45px] font-black text-black/20 hover:text-black/40"></i>
+                    <button onclick="close_add()">
+                        <i class="bi bi-x text-[30px] sm:text-[35px] md:text-[45px] font-black text-black/20 hover:text-black/40"></i>
                     </button>
                 </div>
 
@@ -169,12 +157,11 @@
 
     <div class="flex min-h-screen w-full flex-col-reverse md:flex-col-reverse lg:flex-row">
 
-        <div
-            class="flex flex-col gap-2 sm:gap-3 md:gap-4 border-r border-indigo-200/80 bg-gradient-to-b from-indigo-100 via-slate-100 to-white p-2 sm:p-3 md:p-4 shadow-lg w-full md:w-full lg:w-1/4">
+        <div class="flex flex-col gap-2 sm:gap-3 md:gap-4 border-r border-indigo-200/80 bg-gradient-to-b from-indigo-100 via-slate-100 to-white p-2 sm:p-3 md:p-4 shadow-lg w-full md:w-full lg:w-1/4">
             <div id="container_sidebar" class="flex flex-row flex-wrap gap-2 sm:gap-3 md:gap-4 lg:flex-col"></div>
 
             <div class="mt-auto">
-                <button onclick="show_modal()"
+                <button onclick="open_add()"
                     class="w-full rounded-lg bg-black px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 text-[10px] sm:text-xs md:text-sm font-semibold uppercase tracking-wide text-white transition hover:bg-black/80">
                     Add new worker
                 </button>
@@ -183,67 +170,66 @@
 
         <main class="flex flex-1 items-center justify-center bg-white p-1 sm:p-2 md:p-3 lg:p-4">
             <section class="flex w-full h-full items-center justify-center overflow-auto">
-                <div
-                    class="grid min-h-[320px] sm:min-h-[380px] md:min-h-[400px] h-[60vh] sm:h-[70vh] md:h-[80vh] lg:h-[90vh] w-full min-w-[500px] sm:min-w-[550px] md:min-w-0 md:max-w-5xl lg:max-w-6xl grid-cols-9 grid-rows-[repeat(8,minmax(0,1fr))] border border-black sm:border-2 md:border-4">
+                <div class="grid min-h-[320px] sm:min-h-[380px] md:min-h-[400px] h-[60vh] sm:h-[70vh] md:h-[80vh] lg:h-[90vh] w-full min-w-[500px] sm:min-w-[550px] md:min-w-0 md:max-w-5xl lg:max-w-6xl grid-cols-9 grid-rows-[repeat(8,minmax(0,1fr))] border border-black sm:border-2 md:border-4">
 
                     <div id="room1"
-                        class="col-span-4 col-start-1 row-span-3 row-start-1 flex flex-col items-center justify-between border border-black sm:border-2 md:border-4 bg-orange-200/70 p-1 sm:p-2 md:p-3 lg:p-4 text-center font-semibold uppercase tracking-wide">
+                        class="col-span-4 col-start-1 row-span-3 row-start-1 flex flex-col items-center justify-between border border-black sm:border-2 md:border-4 p-1 sm:p-2 md:p-3 lg:p-4 text-center font-semibold uppercase tracking-wide">
                         <div class="top flex gap-1 sm:gap-2 md:gap-5 items-center">
                             <div class="text-[10px] sm:text-xs md:text-base lg:text-xl">Conference Room</div>
                             <i class="bi bi-plus-lg cursor-pointer text-sm sm:text-base md:text-xl lg:text-3xl text-black/60 border border-black sm:border-2 rounded-full p-0.5 sm:p-0.5 md:p-1 hover:bg-black hover:text-white"
-                                onclick="openAssignModal('room1')"></i>
+                                onclick="open_assign('room1')"></i>
                         </div>
-                        <div id="room" data-room-id="room1"
+                        <div data-room-id="room1"
                             class="middle h-full w-full grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-1 sm:gap-2 md:gap-3 lg:gap-4 mt-1 sm:mt-2 md:mt-3 lg:mt-4">
                         </div>
                     </div>
 
                     <div id="room2"
-                        class="col-span-2 col-start-6 row-span-3 row-start-1 flex flex-col items-center justify-between border border-black sm:border-2 md:border-4 bg-blue-200/70 p-1 sm:p-2 md:p-3 lg:p-4 text-center font-semibold uppercase tracking-wide">
+                        class="col-span-2 col-start-6 row-span-3 row-start-1 flex flex-col items-center justify-between border border-black sm:border-2 md:border-4 p-1 sm:p-2 md:p-3 lg:p-4 text-center font-semibold uppercase tracking-wide">
                         <div class="text-[9px] sm:text-[10px] md:text-xs lg:text-base">Server Room</div>
                         <i class="bi bi-plus-lg cursor-pointer text-xs sm:text-sm md:text-xl lg:text-3xl text-black/60 border border-black sm:border-2 rounded-full p-0.5 md:p-1 hover:bg-black hover:text-white"
-                            onclick="openAssignModal('room2')"></i>
-                        <div id="room" data-room-id="room2"
+                            onclick="open_assign('room2')"></i>
+                        <div data-room-id="room2"
                             class="middle h-full w-full grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-1 sm:gap-2 md:gap-3 lg:gap-4 mt-1 sm:mt-2 md:mt-3 lg:mt-4">
                         </div>
                     </div>
 
                     <div id="room3"
-                        class="col-span-2 col-start-8 row-span-3 row-start-1 flex flex-col items-center justify-between border border-black sm:border-2 md:border-4 bg-green-300/70 p-1 sm:p-2 md:p-3 lg:p-4 text-center font-semibold uppercase tracking-wide">
+                        class="col-span-2 col-start-8 row-span-3 row-start-1 flex flex-col items-center justify-between border border-black sm:border-2 md:border-4 p-1 sm:p-2 md:p-3 lg:p-4 text-center font-semibold uppercase tracking-wide">
                         <div class="text-[9px] sm:text-[10px] md:text-xs lg:text-base">Security Room</div>
                         <i class="bi bi-plus-lg cursor-pointer text-xs sm:text-sm md:text-xl lg:text-3xl text-black/60 border border-black sm:border-2 rounded-full p-0.5 md:p-1 hover:bg-black hover:text-white"
-                            onclick="openAssignModal('room3')"></i>
-                        <div id="room" data-room-id="room3"
+                            onclick="open_assign('room3')"></i>
+                        <div data-room-id="room3"
                             class="middle h-full w-full grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-1 sm:gap-2 md:gap-3 lg:gap-4 mt-1 sm:mt-2 md:mt-3 lg:mt-4">
                         </div>
                     </div>
 
                     <div id="room4"
-                        class="col-span-4 col-start-1 row-span-5 row-start-4 flex flex-col items-center justify-between border border-black sm:border-2 md:border-4 bg-yellow-200/70 p-1 sm:p-2 md:p-3 lg:p-4 text-center font-semibold uppercase tracking-wide">
+                        class="col-span-4 col-start-1 row-span-5 row-start-4 flex flex-col items-center justify-between border border-black sm:border-2 md:border-4 p-1 sm:p-2 md:p-3 lg:p-4 text-center font-semibold uppercase tracking-wide">
                         <div class="text-[9px] sm:text-[10px] md:text-xs lg:text-base">Reception</div>
                         <i class="bi bi-plus-lg cursor-pointer text-xs sm:text-sm md:text-xl lg:text-3xl text-black/60 border border-black sm:border-2 rounded-full p-0.5 md:p-1 hover:bg-black hover:text-white"
-                            onclick="openAssignModal('room4')"></i>
-                        <div id="room" data-room-id="room4"
+                            onclick="open_assign('room4')"></i>
+                        <div data-room-id="room4"
                             class="middle h-full w-full grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-1 sm:gap-2 md:gap-3 lg:gap-4 mt-1 sm:mt-2 md:mt-3 lg:mt-4">
                         </div>
                     </div>
 
                     <div id="room5"
-                        class="col-span-2 col-start-6 row-span-3 row-start-6 flex flex-col items-center justify-between border border-black sm:border-2 md:border-4 bg-orange-300/70 p-1 sm:p-2 md:p-3 lg:p-4 text-center font-semibold uppercase tracking-wide">
+                        class="col-span-2 col-start-6 row-span-3 row-start-6 flex flex-col items-center justify-between border border-black sm:border-2 md:border-4 p-1 sm:p-2 md:p-3 lg:p-4 text-center font-semibold uppercase tracking-wide">
                         <div class="text-[9px] sm:text-[10px] md:text-xs lg:text-base">Staff Room</div>
                         <i class="bi bi-plus-lg cursor-pointer text-xs sm:text-sm md:text-xl lg:text-3xl text-black/60 border border-black sm:border-2 rounded-full p-0.5 md:p-1 hover:bg-black hover:text-white"
-                            onclick="openAssignModal('room5')"></i>
-                        <div id="room" data-room-id="room5"
+                            onclick="open_assign('room5')"></i>
+                        <div data-room-id="room5"
                             class="middle h-full w-full grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-1 sm:gap-2 md:gap-3 lg:gap-4 mt-1 sm:mt-2 md:mt-3 lg:mt-4">
                         </div>
                     </div>
 
                     <div id="room6"
-                        class="col-span-2 col-start-8 row-span-3 row-start-6 flex flex-col items-center justify-between border border-black sm:border-2 md:border-4 bg-emerald-300/70 p-1 sm:p-2 md:p-3 lg:p-4 text-center font-semibold uppercase tracking-wide">
+                        class="col-span-2 col-start-8 row-span-3 row-start-6 flex flex-col items-center justify-between border border-black sm:border-2 md:border-4 p-1 sm:p-2 md:p-3 lg:p-4 text-center font-semibold uppercase tracking-wide">
                         <div class="text-[9px] sm:text-[10px] md:text-xs lg:text-base">Archive Room</div>
                         <i class="bi bi-plus-lg cursor-pointer text-xs sm:text-sm md:text-xl lg:text-3xl text-black/60 border border-black sm:border-2 rounded-full p-0.5 md:p-1 hover:bg-black hover:text-white"
-                            onclick="openAssignModal('room6')"></i>
-                        <div id="room" data-room-id="room6"
+                            onclick="open_assign('room6')"></i>
+                        <div data-room-id="room6"
                             class="middle h-full w-full grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-1 sm:gap-2 md:gap-3 lg:gap-4 mt-1 sm:mt-2 md:mt-3 lg:mt-4">
                         </div>
                     </div>

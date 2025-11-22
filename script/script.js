@@ -2,446 +2,458 @@ import { save, load } from "./modules/localstorage.js";
 import { validate_exp } from "./modules/validator.js";
 
 let employees = load() || [];
-let employee_id = 0; 
-let id = Date.now();
-let room_count = {
+let selected_room = null;
+let exp_count = 0;
+
+const default_avatar = "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg";
+
+const room_limits = {
+  room1: 6,
+  room2: 2,
+  room3: 2,
+  room4: 2,
+  room5: 2,
+  room6: 2
+};
+
+const room_labels = {
+  room1: "Salle de conference",
+  room2: "Salle serveur",
+  room3: "Salle securite",
+  room4: "Reception",
+  room5: "Salle du personnel",
+  room6: "Salle archive"
+};
+
+const rooms_color = {
+  room1: "bg-orange-200/70",
+  room2: "bg-blue-200/70",
+  room3: "bg-green-300/70",
+  room4: "bg-yellow-200/70",
+  room5: "bg-orange-300/70",
+  room6: "bg-emerald-300/70"
+};
+
+const restricted_rooms = ["room2", "room3", "room4", "room6"];
+
+function load_data() {
+  employees = load() || [];
+}
+
+function save_data() {
+  save(employees);
+}
+
+function rooms_count(list = employees) {
+  const counts = {
     room1: 0,
     room2: 0,
     room3: 0,
     room4: 0,
     room5: 0,
     room6: 0
-};
-
-function syncEmployees() {
-    employees = load() || [];
+  };
+  list.forEach(emp => {
+    if (emp.isInRoom && emp.roomId && counts.hasOwnProperty(emp.roomId)) {
+      counts[emp.roomId]++;
+    }
+  });
+  return counts;
 }
 
-function trackRooms() {
-    room_count = {
-        room1: 0,
-        room2: 0,
-        room3: 0,
-        room4: 0,
-        room5: 0,
-        room6: 0
-    };
+function room_label(roomId) {
+  return room_labels[roomId] || "---";
+}
 
-    employees.forEach(emp => {
-        if (emp.isInRoom && emp.roomId && room_count.hasOwnProperty(emp.roomId)) {
-            room_count[emp.roomId]++;
-        }
+function free_emps(source = employees) {
+  return source.filter(e => !e.isInRoom);
+}
+
+function exp_template(index) {
+  return `
+    <div class="exp-field flex flex-col gap-1.5 sm:gap-2 md:gap-2.5 rounded-xl md:rounded-2xl border border-black/10 bg-slate-50/80 p-2 md:p-3 mt-2 relative group">
+      <p class="text-[9px] sm:text-[10px] md:text-xs font-semibold uppercase tracking-[0.2em] sm:tracking-[0.25em] md:tracking-[0.35em] text-slate-500">
+        Experience #${index + 1}
+      </p>
+      <input id="title_${index}" type="text" 
+        class="h-[32px] sm:h-[34px] md:h-[40px] rounded-lg md:rounded-xl border-2 border-black/20 px-2 md:px-3 text-[10px] md:text-xs uppercase tracking-[0.15em] md:tracking-[0.2em] placeholder:text-center" 
+        placeholder="Title (e.g., Lead Receptionist)">
+      <textarea id="desc_${index}" 
+        class="min-h-[50px] sm:min-h-[60px] md:min-h-[80px] rounded-lg md:rounded-xl border-2 border-black/20 px-2 md:px-3 py-1.5 md:py-2 text-[10px] md:text-xs uppercase tracking-[0.15em] md:tracking-[0.2em] placeholder:text-center" 
+        placeholder="Description"></textarea>
+      <div class="grid grid-cols-2 gap-1.5 sm:gap-2 md:gap-3">
+        <label class="flex flex-col text-[8px] sm:text-[9px] md:text-[10px] font-semibold uppercase tracking-[0.15em] sm:tracking-[0.2em] md:tracking-[0.3em] text-gray-500">
+          From
+          <input type="date" id="startdate_${index}" 
+            class="h-[32px] sm:h-[34px] md:h-[38px] rounded-lg md:rounded-xl border-2 border-black/20 px-1.5 md:px-2.5 text-[9px] sm:text-[10px] md:text-xs uppercase tracking-[0.1em] sm:tracking-[0.15em] md:tracking-[0.2em]">
+        </label>
+        <label class="flex flex-col text-[8px] sm:text-[9px] md:text-[10px] font-semibold uppercase tracking-[0.15em] sm:tracking-[0.2em] md:tracking-[0.3em] text-gray-500">
+          To
+          <input type="date" id="enddate_${index}" 
+            class="h-[32px] sm:h-[34px] md:h-[38px] rounded-lg md:rounded-xl border-2 border-black/20 px-1.5 md:px-2.5 text-[9px] sm:text-[10px] md:text-xs uppercase tracking-[0.1em] sm:tracking-[0.15em] md:tracking-[0.2em]">
+        </label>
+      </div>
+    </div>
+  `;
+}
+
+function clear_exp() {
+  document.querySelectorAll(".exp-field").forEach(e => e.remove());
+  exp_count = 0;
+}
+
+function add_exp(btn) {
+  const field = exp_template(exp_count);
+  btn.insertAdjacentHTML("beforebegin", field);
+  exp_count++;
+}
+
+function sidebar_card(employee) {
+  return `
+    <div onclick="showemp_info(${employee.id})" 
+      class="flex w-full cursor-pointer items-center gap-4 rounded-2xl border border-indigo-100 bg-gradient-to-r from-indigo-50 via-white to-slate-50 p-4 shadow-md transition hover:shadow-lg hover:scale-[1.02]">
+      <img class="h-16 w-16 rounded-full border-2 border-indigo-200 object-cover shadow-sm" src="${employee.image}">
+      <div class="text-center md:text-left">
+        <h1 class="text-lg font-semibold text-slate-900 uppercase tracking-wide">${employee.fullname}</h1>
+        <h3 class="text-xs font-semibold uppercase tracking-[0.2em] text-gray-500">${employee.role}</h3>
+      </div>
+    </div>
+  `;
+}
+
+function room_card(employee) {
+  return `
+    <div id="room-card-${employee.id}"
+      class="card relative z-0 h-[65px] w-[52px] sm:h-[75px] sm:w-[60px] md:h-[90px] md:w-[72px] lg:h-[100px] lg:w-[80px] overflow-visible rounded-lg sm:rounded-lg md:rounded-xl border border-black/70 sm:border-2">
+      <img src="${employee.image}"
+        class="h-full w-full rounded-lg sm:rounded-lg md:rounded-xl object-cover cursor-pointer" 
+        onclick="showemp_info(${employee.id})">
+      <button
+        class="absolute -right-0.5 -top-1 sm:-right-1 sm:-top-2 flex h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7 items-center justify-center rounded-full border border-black sm:border-2 bg-white/95 text-[10px] sm:text-xs md:text-sm text-black transition hover:bg-black hover:text-white"
+        onclick="remove_emp(${employee.id})">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+  `;
+}
+
+function assign_card(employee) {
+  return `
+    <div class="mb-3 card h-[14vh] shadow-xs shadow-black w-full rounded-lg flex gap-4 items-center border-black border-2" 
+      id="${employee.id}" onclick="assign_emp(${employee.id})">
+      <img src="${employee.image}" class="ml-4 h-[97%] rounded-full border-2">
+      <div>
+        <h1 class="font-semibold text-[18px] uppercase tracking-[0.2em]">${employee.fullname}</h1> 
+        <h6 class="font-semibold text-[10px] uppercase tracking-[0.2em]">${employee.role}</h6> 
+      </div>
+    </div>
+  `;
+}
+
+function sidebar(sourceEmployees = null) {
+  const container = document.getElementById("container_sidebar");
+  if (!container) return;
+
+  load_data();
+
+  const base = sourceEmployees || employees;
+  const available = free_emps(base);
+
+  container.innerHTML = "";
+
+  if (available.length === 0) {
+    container.innerHTML = `
+      <div class="w-full rounded-2xl border border-dashed border-indigo-200 bg-indigo-50/50 p-4 text-center text-xs font-semibold uppercase tracking-[0.25em] text-indigo-400">
+        No available workers
+      </div>
+    `;
+    return;
+  }
+
+  available.forEach(e => {
+    container.insertAdjacentHTML("beforeend", sidebar_card(e));
+  });
+}
+
+function rooms_ui() {
+  load_data();
+  const containers = document.querySelectorAll("[data-room-id]");
+  containers.forEach(container => (container.innerHTML = ""));
+
+  const counts = rooms_count(employees);
+
+  Object.keys(counts).forEach(roomId => {
+    const el = document.getElementById(roomId);
+    if (!el) return;
+
+    const isEmpty = counts[roomId] === 0;
+    const isMandatory = restricted_rooms.includes(roomId);
+
+    if (isEmpty && isMandatory) {
+      el.classList.remove(rooms_color[roomId]);
+      el.classList.add("bg-red-200");
+    } else {
+      el.classList.remove("bg-red-200");
+      el.classList.add(rooms_color[roomId]);
+    }
+  });
+
+  employees
+    .filter(emp => emp.isInRoom && emp.roomId)
+    .forEach(emp => {
+      const target = document.querySelector(`[data-room-id="${emp.roomId}"]`);
+      if (target) {
+        target.insertAdjacentHTML("beforeend", room_card(emp));
+      }
     });
 }
 
-function addExperienceBlock(index) {
-    const addexp_btn = document.getElementById("addexp_btn");
-    const input_field = `
-        <div class="exp-field flex flex-col gap-1.5 sm:gap-2 md:gap-2.5 rounded-xl md:rounded-2xl border border-black/10 bg-slate-50/80 p-2 md:p-3 mt-2 relative group">
-            <p class="text-[9px] sm:text-[10px] md:text-xs font-semibold uppercase tracking-[0.2em] sm:tracking-[0.25em] md:tracking-[0.35em] text-slate-500">Experience #${index + 1}</p>
-            
-            <input id="title_${index}" type="text" 
-                class="h-[32px] sm:h-[34px] md:h-[40px] rounded-lg md:rounded-xl border-2 border-black/20 px-2 md:px-3 text-[10px] md:text-xs uppercase tracking-[0.15em] md:tracking-[0.2em] placeholder:text-center" 
-                placeholder="Title (e.g., Lead Receptionist)">
-            
-            <textarea id="desc_${index}" 
-                class="min-h-[50px] sm:min-h-[60px] md:min-h-[80px] rounded-lg md:rounded-xl border-2 border-black/20 px-2 md:px-3 py-1.5 md:py-2 text-[10px] md:text-xs uppercase tracking-[0.15em] md:tracking-[0.2em] placeholder:text-center" 
-                placeholder="Description"></textarea>
-            
-            <div class="grid grid-cols-2 gap-1.5 sm:gap-2 md:gap-3">
-                <label class="flex flex-col text-[8px] sm:text-[9px] md:text-[10px] font-semibold uppercase tracking-[0.15em] sm:tracking-[0.2em] md:tracking-[0.3em] text-gray-500">
-                    From
-                    <input type="date" id="startdate_${index}" class="h-[32px] sm:h-[34px] md:h-[38px] rounded-lg md:rounded-xl border-2 border-black/20 px-1.5 md:px-2.5 text-[9px] sm:text-[10px] md:text-xs uppercase tracking-[0.1em] sm:tracking-[0.15em] md:tracking-[0.2em]">
-                </label>
-                <label class="flex flex-col text-[8px] sm:text-[9px] md:text-[10px] font-semibold uppercase tracking-[0.15em] sm:tracking-[0.2em] md:tracking-[0.3em] text-gray-500">
-                    To
-                    <input type="date" id="enddate_${index}" class="h-[32px] sm:h-[34px] md:h-[38px] rounded-lg md:rounded-xl border-2 border-black/20 px-1.5 md:px-2.5 text-[9px] sm:text-[10px] md:text-xs uppercase tracking-[0.1em] sm:tracking-[0.15em] md:tracking-[0.2em]">
-                </label>
-            </div>
-        </div>`;
-    addexp_btn.insertAdjacentHTML("beforebegin", input_field);
+function eligible_emps(roomId, list = employees) {
+  switch (roomId) {
+    case "room1":
+      return list;
+    case "room2":
+      return list.filter(e => ["Technician", "Manager", "Nettoyage"].includes(e.role));
+    case "room3":
+      return list.filter(e => ["Security Agent", "Manager", "Nettoyage"].includes(e.role));
+    case "room4":
+      return list.filter(e => ["Receptionist", "Manager", "Nettoyage"].includes(e.role));
+    case "room5":
+      return list;
+    case "room6":
+      return list.filter(e => e.role === "Manager");
+    default:
+      return list;
+  }
 }
+
+function assign_list_ui(container, list) {
+  container.innerHTML = "";
+  list.forEach(e => {
+    container.insertAdjacentHTML("beforeend", assign_card(e));
+  });
+}
+
+window.showemp_info = function (id) {
+  load_data();
+  const employee = employees.find(e => e.id === id);
+  if (!employee) return;
+
+  const modal = document.getElementById("info_modal");
+  const name = document.getElementById("info_name");
+  const role = document.getElementById("info_role");
+  const img = document.getElementById("info_image");
+  const email = document.getElementById("info_email");
+  const phone = document.getElementById("info_phone");
+  const room = document.getElementById("info_room");
+  const exp_list = document.getElementById("info_experience");
+
+  name.textContent = employee.fullname;
+  role.textContent = employee.role;
+  img.src = employee.image || default_avatar;
+  email.textContent = employee.email;
+  phone.textContent = employee.phone;
+  room.textContent = employee.isInRoom ? room_label(employee.roomId) : "---";
+
+  exp_list.innerHTML = "";
+
+  if (employee.exp && employee.exp.length > 0) {
+    employee.exp.forEach(ex => {
+      const li = `
+        <li class="rounded-xl border border-black/10 bg-white p-3 flex flex-col gap-1">
+          <div class="flex justify-between items-center border-b border-black/5 pb-1 mb-1">
+            <span class="text-xs font-bold uppercase tracking-[0.2em] text-slate-800">${ex.title}</span>
+            <span class="text-[10px] font-mono text-gray-400 bg-gray-100 px-1 rounded">${ex.from} / ${ex.end}</span>
+          </div>
+          <p class="text-[11px] leading-relaxed text-gray-600 uppercase tracking-wider">${ex.description}</p>
+        </li>`;
+      exp_list.insertAdjacentHTML("beforeend", li);
+    });
+  } else {
+    exp_list.innerHTML = `
+      <li class="rounded-xl border border-dashed border-black/20 p-3 text-center text-xs uppercase tracking-[0.3em] text-gray-500">
+        No experience added
+      </li>`;
+  }
+
+  modal.classList.remove("hidden");
+};
+
+window.open_assign = function (roomId) {
+  selected_room = roomId;
+  load_data();
+
+  const modal = document.getElementById("assign_modal");
+  const list_container = document.getElementById("assign_workers_list");
+
+  modal.classList.remove("hidden");
+
+  const eligible = eligible_emps(roomId, employees);
+  const free = free_emps(eligible);
+
+  assign_list_ui(list_container, free);
+};
+
+window.close_assign = function () {
+  const modal = document.getElementById("assign_modal");
+  const list_container = document.getElementById("assign_workers_list");
+
+  list_container.innerHTML = "";
+  modal.classList.add("hidden");
+};
+
+window.assign_emp = function (id) {
+  load_data();
+  if (!selected_room) return;
+
+  const counts = rooms_count(employees);
+  if (counts[selected_room] >= room_limits[selected_room]) {
+    alert("This room is full!");
+    return;
+  }
+
+  const employee = employees.find(e => e.id === id);
+  if (!employee) return;
+
+  employee.isInRoom = true;
+  employee.roomId = selected_room;
+  save_data();
+
+  rooms_ui();
+  sidebar();
+  window.close_assign();
+};
+
+window.remove_emp = function (id) {
+  load_data();
+
+  const employee = employees.find(e => e.id === id);
+  if (!employee) return;
+
+  employee.isInRoom = false;
+  employee.roomId = null;
+  save_data();
+
+  rooms_ui();
+  sidebar();
+};
 
 document.addEventListener("DOMContentLoaded", () => {
-    const addworker_modal = document.getElementById("addworker_modal");
-    const name_input = document.getElementById("name_input");
-    const email_input = document.getElementById("email_input");
-    const phone_input = document.getElementById("phone_input");
-    const select_input = document.getElementById("select_input");
-    const image_input = document.getElementById("image_input");
-    const image_handler = document.getElementById("emplyee_image_preview");
-    const submit_btn = document.getElementById("submit_btn");
-    const addexp_btn = document.getElementById("addexp_btn");
+  const add_modal = document.getElementById("addworker_modal");
+  const name_in = document.getElementById("name_input");
+  const email_in = document.getElementById("email_input");
+  const phone_in = document.getElementById("phone_input");
+  const role_in = document.getElementById("select_input");
+  const img_in = document.getElementById("image_input");
+  const img_prev = document.getElementById("emplyee_image_preview");
+  const submit_btn = document.getElementById("submit_btn");
+  const add_exp_btn = document.getElementById("addexp_btn");
+  const info_modal = document.getElementById("info_modal");
+  const close_info = document.getElementById("close_info_modal");
 
-    window.hide_modal = function () {
-        addworker_modal.classList.add("hidden");
-        name_input.value = "";
-        email_input.value = "";
-        phone_input.value = "";
-        select_input.value = "";
-        image_input.value = "";
-        image_handler.src = "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg";
+  function reset_form() {
+    name_in.value = "";
+    email_in.value = "";
+    phone_in.value = "";
+    role_in.value = "";
+    img_in.value = "";
+    img_prev.src = default_avatar;
+    clear_exp();
+    add_exp(add_exp_btn);
+  }
 
-        document.querySelectorAll(".exp-field").forEach(e => e.remove());
-        employee_id = 0;
+  window.close_add = function () {
+    add_modal.classList.add("hidden");
+    reset_form();
+  };
+
+  window.open_add = function () {
+    add_modal.classList.remove("hidden");
+    reset_form();
+  };
+
+  img_in.addEventListener("change", () => {
+    img_prev.src = img_in.value || default_avatar;
+  });
+
+  add_exp_btn.addEventListener("click", () => {
+    add_exp(add_exp_btn);
+  });
+
+  close_info.addEventListener("click", () => {
+    info_modal.classList.add("hidden");
+  });
+
+  submit_btn.addEventListener("click", () => {
+    load_data();
+
+    const new_emp = {
+      id: Date.now(),
+      fullname: name_in.value || "---",
+      email: email_in.value || "---",
+      phone: phone_in.value || "---",
+      image: img_in.value || default_avatar,
+      role: role_in.value,
+      isInRoom: false,
+      roomId: null,
+      exp: []
     };
 
-    window.show_modal = function () {
-        addworker_modal.classList.remove("hidden");
-        addExperienceBlock(0);
-        employee_id = 1;
-    };
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phoneRegex = /^06\d{8}$/;
 
-    renderRooms();
+    if (new_emp.fullname.length < 3) {
+      alert("Name must be at least 3 characters");
+      return;
+    }
+    if (!new_emp.role) {
+      alert("Choose a role");
+      return;
+    }
+    if (!emailRegex.test(new_emp.email)) {
+      alert("Invalid email format");
+      return;
+    }
+    if (!phoneRegex.test(new_emp.phone)) {
+      alert("Phone must start with 06 and contain 10 digits");
+      return;
+    }
 
-    image_input.addEventListener("change", () => {
-        if (image_input.value === "") {
-            image_handler.src = "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg";
-        } else {
-            image_handler.src = image_input.value;
-        }
-    });
+    for (let i = 0; i < exp_count; i++) {
+      const t = document.getElementById(`title_${i}`);
+      const d = document.getElementById(`desc_${i}`);
+      const s = document.getElementById(`startdate_${i}`);
+      const e = document.getElementById(`enddate_${i}`);
 
-    addexp_btn.addEventListener("click", () => {
-        addExperienceBlock(employee_id);
-        employee_id++;
-    });
-
-    submit_btn.addEventListener("click", () => {
-        syncEmployees();
-
-        const newEmployee = {
-            id: id,
-            fullname: name_input.value || "---",
-            email: email_input.value || "---",
-            phone: phone_input.value || "---",
-            image: image_input.value || "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg",
-            role: select_input.value,
-            isInRoom: false,
-            roomId: null,
-            exp: []
+      if (t && t.value.trim() !== "") {
+        const xp = {
+          title: t.value,
+          description: d ? d.value : "",
+          from: s ? s.value : "",
+          end: e ? e.value : ""
         };
 
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const phoneRegex = /^06\d{8}$/;
-
-        if (newEmployee.fullname.length < 3) {
-            alert("Name must be at least 3 characters");
+        try {
+          if (!validate_exp(xp)) {
+            alert("Experience fields invalid");
             return;
+          }
+          new_emp.exp.push(xp);
+        } catch (err) {
+          alert("Validator Error: " + err.message);
+          return;
         }
+      }
+    }
 
-        if(newEmployee.role == ""){
-            alert("Choose a Role");
-            return;
-        }
-        if (!emailRegex.test(newEmployee.email)) {
-            alert("Invalid email format");
-            return;
-        }
-        if (!phoneRegex.test(newEmployee.phone)) {
-            alert("Phone must start with 06 and contain 10 digits");
-            return;
-        }
-        if (newEmployee.role === "") {
-            alert("Please select a job role");
-            return;
-        }
+    employees.push(new_emp);
+    save_data();
 
-        for (let i = 0; i < employee_id; i++) {
-            const titleEl = document.getElementById(`title_${i}`);
-            const descEl = document.getElementById(`desc_${i}`);
-            const startEl = document.getElementById(`startdate_${i}`);
-            const endEl = document.getElementById(`enddate_${i}`);
+    window.close_add();
+    sidebar();
+    rooms_ui();
+  });
 
-            if (titleEl && titleEl.value.trim() !== "") {
-                const experience = {
-                    title: titleEl.value,
-                    description: descEl.value,
-                    from: startEl.value,
-                    end: endEl.value
-                };
-
-                try {
-                    if (!validate_exp(experience)) {
-                        alert("Experience fields invalid (Check Title/Dates)");
-                        return;
-                    }
-                    newEmployee.exp.push(experience);
-                } catch (error) {
-                    alert("Error in Validator: " + error.message);
-                    console.error(error);
-                    return;
-                }
-            }
-        }
-
-        employees.push(newEmployee);
-        save(employees);
-
-        window.hide_modal();
-        
-        id = Date.now();
-        
-        renderSidebar();
-        renderRooms();
-    });
-
-    renderSidebar();
+  sidebar();
+  rooms_ui();
 });
-
-function renderSidebar() {
-    const container_sidebar = document.getElementById("container_sidebar");
-    container_sidebar.innerHTML = "";
-
-    syncEmployees();
-
-    const availableEmployees = employees.filter(e => !e.isInRoom);
-
-    if (availableEmployees.length === 0) {
-        container_sidebar.innerHTML = `
-        <div class="w-full rounded-2xl border border-dashed border-indigo-200 bg-indigo-50/50 p-4 text-center text-xs font-semibold uppercase tracking-[0.25em] text-indigo-400">
-            No available workers
-        </div>`;
-        return;
-    }
-
-    availableEmployees.forEach(e => {
-        const card = `
-        <div onclick="show_info(${e.id})" 
-             class="flex w-full cursor-pointer items-center gap-4 rounded-2xl border border-indigo-100 bg-gradient-to-r from-indigo-50 via-white to-slate-50 p-4 shadow-md transition hover:shadow-lg hover:scale-[1.02]">
-            <img class="h-16 w-16 rounded-full border-2 border-indigo-200 object-cover shadow-sm" src="${e.image}">
-            <div class="text-center md:text-left">
-                <h1 class="text-lg font-semibold text-slate-900 uppercase tracking-wide">${e.fullname}</h1>
-                <h3 class="text-xs font-semibold uppercase tracking-[0.2em] text-gray-500">${e.role}</h3>
-            </div>
-        </div>`;
-        container_sidebar.insertAdjacentHTML("beforeend", card);
-    });
-}
-
-const info_modal = document.getElementById("info_modal");
-const info_name = document.getElementById("info_name");
-const info_role = document.getElementById("info_role");
-const info_image = document.getElementById("info_image");
-const info_email = document.getElementById("info_email");
-const info_phone = document.getElementById("info_phone");
-const info_room = document.getElementById("info_room");
-const info_experience_list = document.getElementById("info_experience");
-const close_info_modal = document.getElementById("close_info_modal");
-
-function getRoomLabel(roomId) {
-    const roomLabels = {
-        room1: "Salle de conference",
-        room2: "Salle serveur",
-        room3: "Salle securite",
-        room4: "Reception",
-        room5: "Salle du personnel",
-        room6: "Salle archive"
-    };
-    return roomLabels[roomId] || "---";
-}
-
-window.show_info = function (id_user) {
-    syncEmployees();
-    const employee = employees.find(e => e.id === id_user);
-
-    if (employee) {
-        info_name.textContent = employee.fullname;
-        info_role.textContent = employee.role;
-        info_image.src = employee.image;
-        info_email.textContent = employee.email;
-        info_phone.textContent = employee.phone;
-        info_room.textContent = employee.isInRoom && employee.roomId ? getRoomLabel(employee.roomId) : "---";
-
-        info_experience_list.innerHTML = "";
-
-        if (employee.exp && employee.exp.length > 0) {
-            employee.exp.forEach(ex => {
-                const li = `
-                <li class="rounded-xl border border-black/10 bg-white p-3 flex flex-col gap-1">
-                    <div class="flex justify-between items-center border-b border-black/5 pb-1 mb-1">
-                         <span class="text-xs font-bold uppercase tracking-[0.2em] text-slate-800">${ex.title}</span>
-                         <span class="text-[10px] font-mono text-gray-400 bg-gray-100 px-1 rounded">${ex.from} / ${ex.end}</span>
-                    </div>
-                    <p class="text-[11px] leading-relaxed text-gray-600 uppercase tracking-wider">${ex.description}</p>
-                </li>`;
-                info_experience_list.insertAdjacentHTML("beforeend", li);
-            });
-        } else {
-            info_experience_list.innerHTML = `
-            <li class="rounded-xl border border-dashed border-black/20 p-3 text-center text-xs uppercase tracking-[0.3em] text-gray-500">
-                No experience added
-            </li>`;
-        }
-
-        info_modal.classList.remove("hidden");
-    }
-};
-
-close_info_modal.addEventListener("click", () => {
-    info_modal.classList.add("hidden");
-});
-
-const assign_workers_list = document.getElementById("assign_workers_list");
-let selectedRoom = null;
-
-window.openAssignModal = function (roomId) {
-    selectedRoom = roomId;
-    syncEmployees();
-    document.getElementById("assign_modal").classList.remove("hidden");
-    showemployees(selectedRoom);
-};
-
-window.closeAssignModal = function () {
-    assign_workers_list.innerHTML = "";
-    document.getElementById("assign_modal").classList.add("hidden");
-};
-
-function showemployees(room) {
-    assign_workers_list.innerHTML = "";
-    let worker;
-
-    switch (room) {
-        case "room1":
-            worker = employees;
-            break;
-        case "room2":
-            worker = employees.filter(e => e.role === "Technician" || e.role === "Manager" || e.role === "Nettoyage");
-            break;
-        case "room3":
-            worker = employees.filter(e => e.role === "Security Agent" || e.role === "Manager" || e.role === "Nettoyage");
-            break;
-        case "room4":
-            worker = employees.filter(e => e.role === "Receptionist" || e.role === "Manager" || e.role === "Nettoyage");
-            break;
-        case "room5":
-            worker = employees;
-            break;
-        case "room6":
-            worker = employees.filter(e => e.role == "Manager");
-            break;
-        default:
-            worker = employees;
-            break;
-    }
-
-    spawn_elements(worker.filter(e => !e.isInRoom));
-}
-
-function spawn_elements(worker) {
-    worker.forEach(function (e) {
-        const card = `<div class="mb-3 card h-[14vh] shadow-xs shadow-black  w-full rounded-lg flex gap-4 items-center border-black border-2" id="${e.id}" onclick="spawn(${e.id})">
-                    <img src="${e.image}" alt="" class="ml-4 h-[97%] rounded-full border-2">
-                    <div>
-                    <h1 class="font-semibold text-[18px] uppercase tracking-[0.2em]">${e.fullname}</h1> 
-                    <h6 class="font-semibold text-[10px] uppercase tracking-[0.2em]">${e.role}</h6> 
-                    </div>
-                </div>`
-        assign_workers_list.insertAdjacentHTML('beforeend', card);
-    })
-}
-
-window.spawn = function (id_user) {
-    syncEmployees();
-    trackRooms();
-
-    const room_limits = {
-        room1: 6,
-        room2: 2,
-        room3: 2,
-        room4: 2,
-        room5: 2,
-        room6: 2
-    };
-    if (room_count[selectedRoom] >= room_limits[selectedRoom]) {
-        alert("This room is full!");
-        return;
-    }
-
-    const employee = employees.find(e => e.id === id_user);
-    if (!employee || !selectedRoom) {
-        return;
-    }
-
-    employee.isInRoom = true;
-    employee.roomId = selectedRoom;
-    save(employees);
-
-    renderRooms();
-    renderSidebar();
-    closeAssignModal();
-}
-
-window.removeFromRoom = function (id_user) {
-    syncEmployees();
-    const employee = employees.find(e => e.id === id_user);
-    if (!employee) {
-        return;
-    }
-
-    employee.isInRoom = false;
-    employee.roomId = null;
-    save(employees);
-
-    renderRooms();
-    renderSidebar();
-};
-
-function getRoomContainer(roomId) {
-    return document.querySelector(`[data-room-id="${roomId}"]`);
-}
-
-function createRoomCard(employee) {
-    return `<div id="room-card-${employee.id}"
-            class="card relative z-0 h-[65px] w-[52px] sm:h-[75px] sm:w-[60px] md:h-[90px] md:w-[72px] lg:h-[100px] lg:w-[80px] overflow-visible rounded-lg sm:rounded-lg md:rounded-xl border border-black/70 sm:border-2">
-            <img src="${employee.image}"
-                class="h-full w-full rounded-lg sm:rounded-lg md:rounded-xl object-cover cursor-pointer" alt="Badge"
-                onclick="show_info(${employee.id})">
-            <button
-                class="absolute -right-0.5 -top-1 sm:-right-1 sm:-top-2 flex h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7 items-center justify-center rounded-full border border-black sm:border-2 bg-white/95 text-[10px] sm:text-xs md:text-sm text-black transition hover:bg-black hover:text-white hover:cursor-pointer"
-                onclick="removeFromRoom(${employee.id})">
-                <i class="bi bi-x-lg leading-none"></i>
-            </button>
-        </div>`;
-}
-
-function renderRooms() {
-    syncEmployees();
-    const containers = document.querySelectorAll("[data-room-id]");
-    containers.forEach(container => container.innerHTML = "");
-    trackRooms();
-
-    const room_colors = {
-        room1: "bg-orange-200/70",
-        room2: "bg-blue-200/70",
-        room3: "bg-green-300/70",
-        room4: "bg-yellow-200/70",
-        room5: "bg-orange-300/70",
-        room6: "bg-emerald-300/70"
-    };
-
-    for (let room in room_count) {
-        const el = document.getElementById(room);
-        if (!el) continue;
-
-        const is_empty = room_count[room] === 0;
-        const is_mandatory = room !== "room1" && room !== "room5";
-
-        if (is_empty && is_mandatory) {
-            el.classList.remove(room_colors[room]);
-            el.classList.add("bg-red-200");
-        } else {
-            el.classList.remove("bg-red-200");
-            el.classList.add(room_colors[room]);
-        }
-    }
-
-    employees
-        .filter(emp => emp.isInRoom && emp.roomId)
-        .forEach(emp => {
-            const target = getRoomContainer(emp.roomId);
-            if (target) {
-                target.insertAdjacentHTML("beforeend", createRoomCard(emp));
-            }
-        });
-}
