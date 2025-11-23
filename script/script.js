@@ -36,14 +36,17 @@ const rooms_color = {
 
 const restricted_rooms = ["room2", "room3", "room4", "room6"];
 
+// Load employee data from storage
 function load_data() {
   employees = load() || [];
 }
 
+// Save employee data to storage
 function save_data() {
   save(employees);
 }
 
+// Count how many people are in each room
 function rooms_count(list = employees) {
   const counts = {
     room1: 0,
@@ -61,14 +64,17 @@ function rooms_count(list = employees) {
   return counts;
 }
 
+// Get the name of the room by ID
 function room_label(roomId) {
   return room_labels[roomId] || "---";
 }
 
+// Get list of employees not in any room
 function free_emps(source = employees) {
   return source.filter(e => !e.isInRoom);
 }
 
+// HTML for the experience input fields
 function exp_template(index) {
   return `
     <div class="exp-field flex flex-col gap-1.5 sm:gap-2 md:gap-2.5 rounded-xl md:rounded-2xl border border-black/10 bg-slate-50/80 p-2 md:p-3 mt-2 relative group">
@@ -97,17 +103,20 @@ function exp_template(index) {
   `;
 }
 
+// Remove all experience inputs
 function clear_exp() {
   document.querySelectorAll(".exp-field").forEach(e => e.remove());
   exp_count = 0;
 }
 
+// Add a new experience input field
 function add_exp(btn) {
   const field = exp_template(exp_count);
   btn.insertAdjacentHTML("beforebegin", field);
   exp_count++;
 }
 
+// HTML for the employee card in sidebar
 function sidebar_card(employee) {
   return `
     <div onclick="showemp_info(${employee.id})" 
@@ -121,6 +130,7 @@ function sidebar_card(employee) {
   `;
 }
 
+// HTML for the small employee image inside a room
 function room_card(employee) {
   return `
     <div id="room-card-${employee.id}"
@@ -137,6 +147,7 @@ function room_card(employee) {
   `;
 }
 
+// HTML for the employee card in the assignment list
 function assign_card(employee) {
   return `
     <div class="mb-3 card h-[14vh] shadow-xs shadow-black w-full rounded-lg flex gap-4 items-center border-black border-2" 
@@ -150,6 +161,7 @@ function assign_card(employee) {
   `;
 }
 
+// Update the sidebar with available employees
 function sidebar(sourceEmployees = null) {
   const container = document.getElementById("container_sidebar");
   if (!container) return;
@@ -175,6 +187,7 @@ function sidebar(sourceEmployees = null) {
   });
 }
 
+// Update the room displays (colors and people)
 function rooms_ui() {
   load_data();
   const containers = document.querySelectorAll("[data-room-id]");
@@ -208,6 +221,7 @@ function rooms_ui() {
     });
 }
 
+// Check which employees can enter a specific room
 function eligible_emps(roomId, list = employees) {
   switch (roomId) {
     case "room1":
@@ -227,6 +241,7 @@ function eligible_emps(roomId, list = employees) {
   }
 }
 
+// Update the assignment list in the modal
 function assign_list_ui(container, list) {
   container.innerHTML = "";
   list.forEach(e => {
@@ -234,6 +249,7 @@ function assign_list_ui(container, list) {
   });
 }
 
+// Global: Show employee info modal
 window.showemp_info = function (id) {
   load_data();
   const employee = employees.find(e => e.id === id);
@@ -279,6 +295,7 @@ window.showemp_info = function (id) {
   modal.classList.remove("hidden");
 };
 
+// Global: Open the room assignment modal
 window.open_assign = function (roomId) {
   selected_room = roomId;
   load_data();
@@ -294,6 +311,7 @@ window.open_assign = function (roomId) {
   assign_list_ui(list_container, free);
 };
 
+// Global: Close the assignment modal
 window.close_assign = function () {
   const modal = document.getElementById("assign_modal");
   const list_container = document.getElementById("assign_workers_list");
@@ -302,6 +320,7 @@ window.close_assign = function () {
   modal.classList.add("hidden");
 };
 
+// Global: Assign a worker to the selected room
 window.assign_emp = function (id) {
   load_data();
   if (!selected_room) return;
@@ -324,6 +343,7 @@ window.assign_emp = function (id) {
   window.close_assign();
 };
 
+// Global: Remove worker from a room
 window.remove_emp = function (id) {
   load_data();
 
@@ -338,6 +358,7 @@ window.remove_emp = function (id) {
   sidebar();
 };
 
+// Initialize everything when page loads
 document.addEventListener("DOMContentLoaded", () => {
   const add_modal = document.getElementById("addworker_modal");
   const name_in = document.getElementById("name_input");
